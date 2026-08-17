@@ -3,7 +3,7 @@
     <div class="container footer__container">
       <div class="footer__brand">
         <a href="#" class="footer__logo">
-          <span>🍿</span>
+          <LogoIcon :size="28" />
           <strong>Uyu Snack</strong>
         </a>
         <p class="footer__tagline">
@@ -24,20 +24,26 @@
         <a href="https://www.instagram.com/uyu_snack/" target="_blank" rel="noopener noreferrer">
           Instagram: @uyu_snack
         </a>
-        <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer">
+        <a href="https://wa.me/6281216593329" target="_blank" rel="noopener noreferrer">
           WhatsApp: 0812-1659-3329
         </a>
-        <span>📍 Indonesia</span>
+        <span class="footer__location"><MapPinIcon :size="16" /> Indonesia</span>
       </div>
     </div>
 
     <div class="footer__bottom">
       <div class="container">
-        <p>© {{ new Date().getFullYear() }} Uyu Snack. Dibuat dengan ❤️.</p>
+        <p class="footer__love">© {{ new Date().getFullYear() }} Uyu Snack. Dibuat dengan <HeartIcon :size="14" /></p>
       </div>
     </div>
   </footer>
 </template>
+
+<script setup>
+import LogoIcon from './icons/LogoIcon.vue'
+import MapPinIcon from './icons/MapPinIcon.vue'
+import HeartIcon from './icons/HeartIcon.vue'
+</script>
 
 <style scoped>
 .footer {
@@ -58,6 +64,7 @@
   gap: 0.5rem;
   font-size: 1.25rem;
   margin-bottom: 0.75rem;
+  color: var(--color-primary);
 }
 
 .footer__tagline {
@@ -87,6 +94,24 @@
 
 .footer__links a:hover {
   color: var(--color-white);
+}
+
+.footer__location {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.footer__love {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  color: #b0b0b0;
+}
+
+.footer__love svg {
+  color: var(--color-primary);
 }
 
 .footer__bottom {

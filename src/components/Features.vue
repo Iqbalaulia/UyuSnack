@@ -5,7 +5,9 @@
       <p class="section-subtitle">Kami fokus pada kualitas, rasa, dan pengalaman terbaik untukmu.</p>
       <div class="features__grid">
         <div v-for="feature in features" :key="feature.title" class="feature-card">
-          <div class="feature-card__icon">{{ feature.icon }}</div>
+          <div class="feature-card__icon">
+            <component :is="feature.icon" :size="40" />
+          </div>
           <h3 class="feature-card__title">{{ feature.title }}</h3>
           <p class="feature-card__desc">{{ feature.description }}</p>
         </div>
@@ -15,24 +17,29 @@
 </template>
 
 <script setup>
+import HomemadeIcon from './icons/HomemadeIcon.vue'
+import PackageIcon from './icons/PackageIcon.vue'
+import PriceIcon from './icons/PriceIcon.vue'
+import HampersIcon from './icons/HampersIcon.vue'
+
 const features = [
   {
-    icon: '🏠',
+    icon: HomemadeIcon,
     title: 'Homemade',
     description: 'Dibuat di dapur sendiri tanpa bahan pengawet, lebih sehat dan terjaga kebersihannya.',
   },
   {
-    icon: '📦',
+    icon: PackageIcon,
     title: 'Kemasan Aman',
     description: 'Setiap produk dikemas rapat dan higienis, cocok untuk dikirim ke luar kota.',
   },
   {
-    icon: '💰',
+    icon: PriceIcon,
     title: 'Harga Bersahabat',
     description: 'Camilan berkualitas dengan harga terjangkau, pas di kantong pelajar & karyawan.',
   },
   {
-    icon: '🎁',
+    icon: HampersIcon,
     title: 'Bisa Custom Hampers',
     description: 'Pilih isi dan desain kemasan sesuai kebutuhan untuk hadiah atau acara spesial.',
   },
@@ -64,7 +71,9 @@ const features = [
 }
 
 .feature-card__icon {
-  font-size: 2.5rem;
+  display: flex;
+  justify-content: center;
+  color: var(--color-primary);
   margin-bottom: 0.75rem;
 }
 

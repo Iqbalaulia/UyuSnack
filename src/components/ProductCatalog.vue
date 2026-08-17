@@ -56,7 +56,7 @@ const filteredProducts = computed(() => {
 
 const getOrderLink = (product) => {
   const message = `Halo Uyu Snack, saya mau pesan ${product.name}. Apakah tersedia?`
-  return `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`
+  return `https://wa.me/6281216593329?text=${encodeURIComponent(message)}`
 }
 </script>
 

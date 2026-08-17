@@ -6,7 +6,7 @@
       <div class="testimonials__grid">
         <div v-for="testi in testimonials" :key="testi.name" class="testimonial-card">
           <div class="testimonial-card__stars">
-            <span v-for="n in 5" :key="n" class="testimonial-card__star">★</span>
+            <StarIcon v-for="n in 5" :key="n" :size="16" />
           </div>
           <p class="testimonial-card__text">"{{ testi.text }}"</p>
           <div class="testimonial-card__author">
@@ -23,6 +23,8 @@
 </template>
 
 <script setup>
+import StarIcon from './icons/StarIcon.vue'
+
 const testimonials = [
   {
     text: 'Brownies Lumernya enak banget, lembut dan nggak eneg. Sudah repeat order 3 kali!',
@@ -62,9 +64,10 @@ const testimonials = [
 }
 
 .testimonial-card__stars {
+  display: flex;
+  gap: 0.15rem;
   color: var(--color-accent);
   margin-bottom: 0.75rem;
-  font-size: 1.1rem;
 }
 
 .testimonial-card__text {

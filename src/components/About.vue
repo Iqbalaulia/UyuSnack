@@ -3,7 +3,7 @@
     <div class="container about__container">
       <div class="about__image">
         <img
-          src="/assets/about-snack.jpg"
+          src="/assets/images/menu.jpg"
           alt="Cerita Uyu Snack"
           loading="lazy"
         />
@@ -21,7 +21,7 @@
         </p>
         <ul class="about__list">
           <li v-for="item in highlights" :key="item">
-            <span class="about__check">✓</span>
+            <span class="about__check"><CheckIcon :size="12" /></span>
             {{ item }}
           </li>
         </ul>
@@ -31,6 +31,8 @@
 </template>
 
 <script setup>
+import CheckIcon from './icons/CheckIcon.vue'
+
 const highlights = [
   'Bahan premium & halal',
   'Dibuat fresh setiap hari',

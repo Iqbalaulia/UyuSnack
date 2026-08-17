@@ -6,7 +6,9 @@
       <div class="how-to__steps">
         <div v-for="(step, index) in steps" :key="index" class="step-card">
           <div class="step-card__number">{{ index + 1 }}</div>
-          <div class="step-card__icon">{{ step.icon }}</div>
+          <div class="step-card__icon">
+            <component :is="step.icon" :size="40" />
+          </div>
           <h3 class="step-card__title">{{ step.title }}</h3>
           <p class="step-card__desc">{{ step.description }}</p>
         </div>
@@ -16,19 +18,23 @@
 </template>
 
 <script setup>
+import MenuIcon from './icons/MenuIcon.vue'
+import ChatIcon from './icons/ChatIcon.vue'
+import TruckIcon from './icons/TruckIcon.vue'
+
 const steps = [
   {
-    icon: '📱',
+    icon: MenuIcon,
     title: 'Pilih Menu',
     description: 'Lihat katalog menu dan pilih camilan favoritmu.',
   },
   {
-    icon: '💬',
+    icon: ChatIcon,
     title: 'Chat WhatsApp',
     description: 'Klik tombol pesan, otomatis terhubung ke WhatsApp kami.',
   },
   {
-    icon: '🚚',
+    icon: TruckIcon,
     title: 'Tunggu Diantar',
     description: 'Konfirmasi pembayaran, lalu kami proses dan kirim pesananmu.',
   },
@@ -72,7 +78,9 @@ const steps = [
 }
 
 .step-card__icon {
-  font-size: 2.5rem;
+  display: flex;
+  justify-content: center;
+  color: var(--color-primary);
   margin-bottom: 0.75rem;
 }
 

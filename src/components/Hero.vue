@@ -2,7 +2,7 @@
   <section id="beranda" class="hero">
     <div class="container hero__container">
       <div class="hero__content">
-        <span class="hero__tag">✨ Homemade & Halal</span>
+        <span class="hero__tag"><SparkleIcon :size="16" /> Homemade & Halal</span>
         <h1 class="hero__title">
           Camilan Lezat untuk Setiap Momen Bahagia
         </h1>
@@ -15,7 +15,7 @@
             Lihat Menu
           </a>
           <a
-            href="https://wa.me/6281234567890?text=Halo%20Uyu%20Snack,%20saya%20mau%20pesan"
+            href="https://wa.me/6281216593329?text=Halo%20Uyu%20Snack,%20saya%20mau%20pesan"
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-secondary hero__btn"
@@ -41,12 +41,12 @@
       <div class="hero__image">
         <div class="hero__image-wrapper">
           <img
-            src="/assets/hero-snack.jpg"
+            src="/assets/images/burnt_cheesecake_chocoregal.jpg"
             alt="Aneka camilan Uyu Snack"
             loading="eager"
           />
           <div class="hero__floating-badge">
-            <span>🔥</span>
+            <FireIcon :size="18" class="hero__fire" />
             <p>Best Seller minggu ini</p>
           </div>
         </div>
@@ -54,6 +54,11 @@
     </div>
   </section>
 </template>
+
+<script setup>
+import SparkleIcon from './icons/SparkleIcon.vue'
+import FireIcon from './icons/FireIcon.vue'
+</script>
 
 <style scoped>
 .hero {
@@ -70,7 +75,9 @@
 }
 
 .hero__tag {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   background: var(--color-white);
   color: var(--color-primary-dark);
   padding: 0.5rem 1rem;
@@ -161,8 +168,9 @@
   color: var(--color-text);
 }
 
-.hero__floating-badge span {
-  font-size: 1.25rem;
+.hero__fire {
+  color: var(--color-primary);
+  flex-shrink: 0;
 }
 
 @media (min-width: 768px) {

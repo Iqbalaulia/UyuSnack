@@ -2,7 +2,7 @@
   <header class="header" :class="{ 'header--scrolled': isScrolled }">
     <div class="container header__container">
       <a href="#" class="logo">
-        <span class="logo__icon">🍿</span>
+        <LogoIcon :size="28" class="logo__icon" />
         <span class="logo__text">Uyu Snack</span>
       </a>
 
@@ -41,6 +41,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import LogoIcon from './icons/LogoIcon.vue'
 
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
@@ -100,7 +101,8 @@ onUnmounted(() => {
 }
 
 .logo__icon {
-  font-size: 1.5rem;
+  flex-shrink: 0;
+  color: var(--color-primary);
 }
 
 .menu-toggle {

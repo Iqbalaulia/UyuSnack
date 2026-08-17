@@ -13,7 +13,7 @@
             rel="noopener noreferrer"
             class="btn cta__btn cta__btn--whatsapp"
           >
-            💬 Pesan via WhatsApp
+            <ChatIcon :size="18" /> Pesan via WhatsApp
           </a>
           <a
             href="https://www.instagram.com/uyu_snack/"
@@ -21,13 +21,18 @@
             rel="noopener noreferrer"
             class="btn cta__btn cta__btn--instagram"
           >
-            📸 Lihat di Instagram
+            <InstagramIcon :size="18" /> Lihat di Instagram
           </a>
         </div>
       </div>
     </div>
   </section>
 </template>
+
+<script setup>
+import ChatIcon from './icons/ChatIcon.vue'
+import InstagramIcon from './icons/InstagramIcon.vue'
+</script>
 
 <style scoped>
 .cta {
