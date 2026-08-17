@@ -4,7 +4,7 @@
       <SectionReveal direction="left">
         <div class="about__image">
           <LazyImage
-            src="/assets/images/about.webp"
+            src="/assets/images/about.jpg"
             alt="Logo Uyu Snack"
             loading="lazy"
           />
