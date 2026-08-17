@@ -24,7 +24,7 @@
         <a href="https://www.instagram.com/uyu_snack/" target="_blank" rel="noopener noreferrer">
           Instagram: @uyu_snack
         </a>
-        <a href="https://wa.me/6281216593329" target="_blank" rel="noopener noreferrer">
+        <a :href="waLink" target="_blank" rel="noopener noreferrer">
           WhatsApp: 0812-1659-3329
         </a>
         <span class="footer__location"><MapPinIcon :size="16" /> Indonesia</span>
@@ -43,6 +43,9 @@
 import LogoIcon from './icons/LogoIcon.vue'
 import MapPinIcon from './icons/MapPinIcon.vue'
 import HeartIcon from './icons/HeartIcon.vue'
+import { WHATSAPP_NUMBER } from '../data/products.js'
+
+const waLink = `https://wa.me/${WHATSAPP_NUMBER}`
 </script>
 
 <style scoped>

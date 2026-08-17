@@ -1,0 +1,71 @@
+# TODO — Pengembangan Landing Page Uyu Snack
+
+Daftar rencana pengembangan landing page Uyu Snack. Urutan berdasarkan prioritas dampak terhadap konversi dan usaha pengerjaan.
+
+---
+
+## Legenda Status
+
+| Status | Keterangan |
+|--------|------------|
+| 🔴 To Do | Belum dikerjakan |
+| 🟡 In Progress | Sedang dikerjakan |
+| 🟢 Done | Sudah selesai |
+
+## Legenda Prioritas
+
+| Prioritas | Keterangan |
+|-----------|------------|
+| 🔥 High | Berdampak langsung pada konversi/pengalaman user |
+| ⚡ Medium | Peningkatan fitur dan kenyamanan |
+| 💡 Low | Nice to have / jangka panjang |
+
+---
+
+## Phase 1 — Quick Wins
+
+| Status | Prioritas | Task | Keterangan | File Terkait |
+|--------|-----------|------|------------|--------------|
+| 🟢 Done | 🔥 High | Setup project Vue 3 + Vite | Struktur awal, routing, dan styling system | `package.json`, `vite.config.js`, `src/style.css` |
+| 🟢 Done | 🔥 High | Landing page mobile-first | Hero, About, Features, Menu, Testimonials, How to Order, CTA, Footer | `src/components/*.vue` |
+| 🟢 Done | 🔥 High | Ganti emoji dengan icon SVG custom | Semua icon menggunakan SVG line art konsisten | `src/components/icons/*.vue` |
+| 🟢 Done | 🔥 High | Integrasi gambar & data asli Uyu Snack | Menggunakan foto produk, logo, harga, dan nomor WA asli dari menu Uyu Snack | `public/assets/`, `src/data/products.js`, `src/components/Hero.vue`, `src/components/About.vue` |
+| 🟢 Done | 🔥 High | Floating WhatsApp button | Tombol WA mengambang di pojok kanan bawah, selalu terlihat saat scroll | `src/components/WhatsAppFloat.vue` |
+| 🟢 Done | 🔥 High | Section FAQ | Pertanyaan umum seputar pemesanan, pengiriman, dan custom hampers | `src/components/FAQ.vue` |
+| 🟢 Done | 🔥 High | Open Graph & meta tags lengkap | `og:image`, `og:title`, `og:description`, Twitter Card agar link menarik saat dishare | `index.html` |
+| 🟢 Done | ⚡ Medium | Sticky bottom bar di mobile | Tombol CTA ke Menu/WhatsApp sticky di bawah layar mobile | `src/components/MobileStickyBar.vue` |
+
+## Phase 2 — Peningkatan Konversi
+
+| Status | Prioritas | Task | Keterangan | File Terkait |
+|--------|-----------|------|------------|--------------|
+| 🔴 To Do | 🔥 High | Keranjang sederhana | User bisa pilih beberapa produk, total otomatis, kirim ke WA dalam satu pesan | `src/stores/cart.js`, `src/components/CartDrawer.vue` |
+| 🔴 To Do | 🔥 High | Testimoni dengan foto real | Ganti avatar huruf dengan screenshot chat/foto pembeli asli | `src/components/Testimonials.vue`, `src/data/testimonials.js` |
+| 🔴 To Do | ⚡ Medium | Indikator stok / label pre-order | Status Tersedia/Habis/Pre-Order pada setiap produk | `src/data/products.js`, `src/components/ProductCatalog.vue` |
+| 🔴 To Do | ⚡ Medium | Animasi scroll & micro-interaction | Fade-in, hover effect, smooth reveal pakai CSS/Intersection Observer | `src/style.css`, `src/components/*.vue` |
+| 🔴 To Do | ⚡ Medium | Lazy load gambar produk | Optimasi performa dengan lazy loading dan placeholder | `src/components/ProductCatalog.vue`, `src/components/Hero.vue` |
+
+## Phase 3 — Skalabilitas & Konten
+
+| Status | Prioritas | Task | Keterangan | File Terkait |
+|--------|-----------|------|------------|--------------|
+| 🔴 To Do | ⚡ Medium | Katalog dinamis dari JSON/CMS | Data produk dipindahkan ke JSON atau CMS agar owner bisa update sendiri | `src/data/products.json`, integrasi CMS |
+| 🔴 To Do | ⚡ Medium | Galeri Instagram feed | Embed feed terbaru `@uyu_snack` (manual atau API) | `src/components/InstagramFeed.vue` |
+| 🔴 To Do | 💡 Low | Blog / tips / resep | Konten SEO untuk menarik traffic organik | `src/views/Blog.vue`, `src/data/posts.js` |
+| 🔴 To Do | 💡 Low | Multi-bahasa (ID/EN) | Dukungan Bahasa Inggris untuk pembeli luar negeri | `src/i18n/`, `vue-i18n` |
+
+## Phase 4 — Advanced & Analitik
+
+| Status | Prioritas | Task | Keterangan | File Terkait |
+|--------|-----------|------|------------|--------------|
+| 🔴 To Do | 💡 Low | Progressive Web App (PWA) | Bisa di-install di homescreen, offline support dasar | `vite-plugin-pwa`, `manifest.json` |
+| 🔴 To Do | 💡 Low | Integrasi payment gateway | Checkout langsung via Midtrans/Xendit | `src/components/Checkout.vue`, backend payment |
+| 🔴 To Do | 💡 Low | Analytics & heatmap | Google Analytics 4 / Plausible / Microsoft Clarity untuk tracking perilaku user | `index.html`, third-party script |
+| 🔴 To Do | 💡 Low | Newsletter / promo capture | Form email untuk blast promo menu baru | `src/components/Newsletter.vue` |
+
+---
+
+## Catatan
+
+- Phase 1 sudah selesai: data asli Uyu Snack (produk burnt cheesecake, harga, nomor WA 0812-1659-3329, dan logo) sudah diintegrasikan.
+- Rekomendasi lanjut ke **Phase 2** untuk meningkatkan konversi lebih jauh.

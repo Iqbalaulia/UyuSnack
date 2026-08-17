@@ -1,46 +1,49 @@
 export const categories = [
-  { id: "all", name: "Semua" },
-  { id: "sweet", name: "Manis" },
-  { id: "savory", name: "Gurih" },
-  { id: "package", name: "Paket" },
-];
+  { id: 'all', name: 'Semua' },
+  { id: 'best-seller', name: 'Best Seller' },
+  { id: 'new', name: 'New Variant' },
+]
 
 export const products = [
   {
     id: 1,
-    name: "Burnt Cheesecake OG",
-    category: "sweet",
+    name: 'Burnt Cheesecake Original',
+    category: 'best-seller',
     price: 21000,
-    description:
-      "Brownies legit dengan topping keju meleleh, cocok untuk teman ngopi.",
-    image: "/assets/images/burnt_cheesecake_original.jpg",
-    badge: "Best Seller",
+    description: 'Classic variant dengan tekstur lembut dan permukaan karamelisasi yang sempurna. Diameter 10cm, tinggi 3cm.',
+    image: '/assets/burnt-cheesecake-original.jpg',
+    badge: 'Best Seller',
   },
   {
     id: 2,
-    name: "Burnt Cheesecake Chocobery",
-    category: "sweet",
+    name: 'Burnt Cheesecake Chocobery',
+    category: 'new',
     price: 23500,
-    description:
-      "Cireng renyah diluar kenyal didalam dengan isian ayam suwir pedas.",
-    image: "/assets/images/burnt_cheesecake_chocobery.jpg",
-    badge: "Best Seller",
+    description: 'Perpaduan lembut burnt cheesecake dengan topping selai stroberi manis dan lilitan cokelat premium.',
+    image: '/assets/burnt-cheesecake-chocobery.jpg',
+    badge: 'New Variant',
   },
   {
     id: 3,
-    name: "Burnt Cheesecake Chocolate Regal",
-    category: "sweet",
+    name: 'Burnt Cheesecake Chocolate Regal',
+    category: 'new',
     price: 23500,
-    description: "Aneka kue kering lembut untuk hampers atau suguhan keluarga.",
-    image: "/assets/images/burnt_cheesecake_chocoregal.jpg",
-    badge: "Terlaris",
+    description: 'Burnt cheesecake cokelat dengan topping cokelat lumer, biskuit Regal utuh, dan remahan biskuit renyah.',
+    image: '/assets/burnt-cheesecake-chocoregal.jpg',
+    badge: 'New Variant',
   },
-];
+]
 
 export const formatPrice = (price) => {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
     minimumFractionDigits: 0,
-  }).format(price);
-};
+  }).format(price)
+}
+
+export const WHATSAPP_NUMBER = '6281216593329'
+
+export const getWhatsAppLink = (message) => {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+}

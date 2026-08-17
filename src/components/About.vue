@@ -3,8 +3,8 @@
     <div class="container about__container">
       <div class="about__image">
         <img
-          src="/assets/images/menu.jpg"
-          alt="Cerita Uyu Snack"
+          src="/assets/images/about.webp"
+          alt="Logo Uyu Snack"
           loading="lazy"
         />
       </div>

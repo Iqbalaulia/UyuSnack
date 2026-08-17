@@ -8,7 +8,7 @@
         </p>
         <div class="cta__actions">
           <a
-            href="https://wa.me/6281216593329?text=Halo%20Uyu%20Snack,%20saya%20mau%20pesan"
+            :href="waLink"
             target="_blank"
             rel="noopener noreferrer"
             class="btn cta__btn cta__btn--whatsapp"
@@ -32,6 +32,9 @@
 <script setup>
 import ChatIcon from './icons/ChatIcon.vue'
 import InstagramIcon from './icons/InstagramIcon.vue'
+import { getWhatsAppLink } from '../data/products.js'
+
+const waLink = getWhatsAppLink('Halo Uyu Snack, saya mau pesan. Apakah bisa dibantu?')
 </script>
 
 <style scoped>

@@ -45,7 +45,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { categories, products, formatPrice } from '../data/products.js'
+import { categories, products, formatPrice, getWhatsAppLink } from '../data/products.js'
 
 const activeCategory = ref('all')
 
@@ -56,7 +56,7 @@ const filteredProducts = computed(() => {
 
 const getOrderLink = (product) => {
   const message = `Halo Uyu Snack, saya mau pesan ${product.name}. Apakah tersedia?`
-  return `https://wa.me/6281216593329?text=${encodeURIComponent(message)}`
+  return getWhatsAppLink(message)
 }
 </script>
 

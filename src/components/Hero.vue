@@ -15,7 +15,7 @@
             Lihat Menu
           </a>
           <a
-            href="https://wa.me/6281216593329?text=Halo%20Uyu%20Snack,%20saya%20mau%20pesan"
+            :href="waLink"
             target="_blank"
             rel="noopener noreferrer"
             class="btn btn-secondary hero__btn"
@@ -41,8 +41,8 @@
       <div class="hero__image">
         <div class="hero__image-wrapper">
           <img
-            src="/assets/images/burnt_cheesecake_chocoregal.jpg"
-            alt="Aneka camilan Uyu Snack"
+            src="/assets/hero-menu.jpg"
+            alt="Daftar menu Uyu Snack"
             loading="eager"
           />
           <div class="hero__floating-badge">
@@ -58,6 +58,9 @@
 <script setup>
 import SparkleIcon from './icons/SparkleIcon.vue'
 import FireIcon from './icons/FireIcon.vue'
+import { getWhatsAppLink } from '../data/products.js'
+
+const waLink = getWhatsAppLink('Halo Uyu Snack, saya mau pesan. Apakah bisa dibantu?')
 </script>
 
 <style scoped>
