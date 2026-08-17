@@ -18,49 +18,69 @@
         </button>
       </div>
 
-      <div class="menu__grid">
+      <div v-if="loading" class="menu__loading">
+        <div v-for="n in 3" :key="n" class="menu__skeleton">
+          <div class="menu__skeleton-image"></div>
+          <div class="menu__skeleton-body">
+            <div class="menu__skeleton-line menu__skeleton-line--title"></div>
+            <div class="menu__skeleton-line"></div>
+            <div class="menu__skeleton-line menu__skeleton-line--short"></div>
+          </div>
+        </div>
+      </div>
+
+      <div v-else-if="error && products.length === 0" class="menu__error">
+        <p>Gagal memuat menu. Silakan coba lagi nanti.</p>
+        <button class="btn btn-primary" @click="fetchProducts">Muat Ulang</button>
+      </div>
+
+      <div v-else class="menu__grid">
         <SectionReveal v-for="(product, index) in filteredProducts" :key="product.id" :style="{ transitionDelay: `${index * 100}ms` }">
           <div class="product-card">
-          <div class="product-card__image">
-            <LazyImage :src="product.image" :alt="product.name" loading="lazy" />
-            <span v-if="product.badge" class="product-card__badge">{{ product.badge }}</span>
-          </div>
-          <div class="product-card__body">
-            <div class="product-card__meta">
-              <h3 class="product-card__name">{{ product.name }}</h3>
-              <span
-                v-if="product.stock"
-                class="product-card__stock"
-                :class="stockLabels[product.stock].class"
-              >
-                {{ stockLabels[product.stock].text }}
-              </span>
+            <div class="product-card__image">
+              <LazyImage :src="product.image" :alt="product.name" loading="lazy" />
+              <span v-if="product.badge" class="product-card__badge">{{ product.badge }}</span>
             </div>
-            <p class="product-card__desc">{{ product.description }}</p>
-            <div class="product-card__footer">
-              <span class="product-card__price">{{ formatPrice(product.price) }}</span>
-              <div class="product-card__actions">
-                <button
-                  class="product-card__cart"
-                  :class="{ 'product-card__cart--added': isInCart(product.id) }"
-                  @click="addToCart(product)"
-                  :aria-label="isInCart(product.id) ? 'Tambah lagi ke keranjang' : 'Tambah ke keranjang'"
+            <div class="product-card__body">
+              <div class="product-card__meta">
+                <h3 class="product-card__name">{{ product.name }}</h3>
+                <span
+                  v-if="product.stock"
+                  class="product-card__stock"
+                  :class="stockLabels[product.stock].class"
                 >
-                  <CartIcon :size="16" />
-                </button>
-                <a
-                  :href="getOrderLink(product)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="product-card__btn"
-                >
-                  Pesan
-                </a>
+                  {{ stockLabels[product.stock].text }}
+                </span>
+              </div>
+              <p class="product-card__desc">{{ product.description }}</p>
+              <div class="product-card__footer">
+                <span class="product-card__price">{{ formatPrice(product.price) }}</span>
+                <div class="product-card__actions">
+                  <button
+                    class="product-card__cart"
+                    :class="{ 'product-card__cart--added': isInCart(product.id) }"
+                    @click="addToCart(product)"
+                    :aria-label="isInCart(product.id) ? 'Tambah lagi ke keranjang' : 'Tambah ke keranjang'"
+                  >
+                    <CartIcon :size="16" />
+                  </button>
+                  <a
+                    :href="getOrderLink(product)"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="product-card__btn"
+                  >
+                    Pesan
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-          </div>
         </SectionReveal>
+      </div>
+
+      <div v-if="usingFallback" class="menu__fallback">
+        <p>Menampilkan data lokal karena koneksi ke server terbatas.</p>
       </div>
     </div>
   </section>
@@ -68,17 +88,19 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { categories, products, formatPrice, getWhatsAppLink, stockLabels } from '../data/products.js'
 import { addToCart, cart } from '../stores/cart.js'
+import { useProducts } from '../composables/useProducts.js'
 import CartIcon from './icons/CartIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 import LazyImage from './LazyImage.vue'
 
+const { products, loading, error, usingFallback, categories, formatPrice, getWhatsAppLink, stockLabels, fetchProducts } = useProducts()
+
 const activeCategory = ref('all')
 
 const filteredProducts = computed(() => {
-  if (activeCategory.value === 'all') return products
-  return products.filter((p) => p.category === activeCategory.value)
+  if (activeCategory.value === 'all') return products.value
+  return products.value.filter((p) => p.category === activeCategory.value)
 })
 
 const getOrderLink = (product) => {
@@ -272,14 +294,90 @@ const isInCart = (productId) => {
   background: var(--color-primary-dark);
 }
 
+.menu__loading,
+.menu__error,
+.menu__fallback {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.menu__loading {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.menu__skeleton {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.menu__skeleton-image {
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(110deg, #f0f0f0 8%, #fafafa 18%, #f0f0f0 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+.menu__skeleton-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.menu__skeleton-line {
+  height: 0.875rem;
+  background: linear-gradient(110deg, #f0f0f0 8%, #fafafa 18%, #f0f0f0 33%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: 0.25rem;
+}
+
+.menu__skeleton-line--title {
+  width: 70%;
+  height: 1.1rem;
+}
+
+.menu__skeleton-line--short {
+  width: 40%;
+}
+
+.menu__error {
+  color: var(--color-text-light);
+}
+
+.menu__error p {
+  margin-bottom: 1rem;
+}
+
+.menu__fallback {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-top: 1rem;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 @media (min-width: 640px) {
-  .menu__grid {
+  .menu__grid,
+  .menu__loading {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  .menu__grid {
+  .menu__grid,
+  .menu__loading {
     grid-template-columns: repeat(3, 1fr);
   }
 }

@@ -49,7 +49,7 @@ Daftar rencana pengembangan landing page Uyu Snack. Urutan berdasarkan prioritas
 
 | Status | Prioritas | Task | Keterangan | File Terkait |
 |--------|-----------|------|------------|--------------|
-| 🔴 To Do | ⚡ Medium | Katalog dinamis dari JSON/CMS | Data produk dipindahkan ke JSON atau CMS agar owner bisa update sendiri | `src/data/products.json`, integrasi CMS |
+| 🟢 Done | ⚡ Medium | Katalog dinamis dari Supabase | Data produk di-fetch dari Supabase, owner bisa update via dashboard Supabase | `src/lib/supabase.js`, `src/composables/useProducts.js`, `supabase/schema.sql` |
 | 🔴 To Do | ⚡ Medium | Galeri Instagram feed | Embed feed terbaru `@uyu_snack` (manual atau API) | `src/components/InstagramFeed.vue` |
 | 🔴 To Do | 💡 Low | Blog / tips / resep | Konten SEO untuk menarik traffic organik | `src/views/Blog.vue`, `src/data/posts.js` |
 | 🔴 To Do | 💡 Low | Multi-bahasa (ID/EN) | Dukungan Bahasa Inggris untuk pembeli luar negeri | `src/i18n/`, `vue-i18n` |
