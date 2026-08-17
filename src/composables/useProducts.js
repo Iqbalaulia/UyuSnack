@@ -1,18 +1,12 @@
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { supabase } from '../lib/supabase.js'
-import { products as localProducts, formatPrice, stockLabels, WHATSAPP_NUMBER, getWhatsAppLink } from '../data/products.js'
+import { products as localProducts, formatPrice, WHATSAPP_NUMBER, getWhatsAppLink } from '../data/products.js'
 
 export function useProducts() {
   const products = ref([])
   const loading = ref(true)
   const error = ref(null)
   const usingFallback = ref(false)
-
-  const categories = [
-    { id: 'all', name: 'Semua' },
-    { id: 'best-seller', name: 'Best Seller' },
-    { id: 'new', name: 'New Variant' },
-  ]
 
   const fetchProducts = async () => {
     loading.value = true
@@ -52,9 +46,7 @@ export function useProducts() {
     loading,
     error,
     usingFallback,
-    categories,
     formatPrice,
-    stockLabels,
     WHATSAPP_NUMBER,
     getWhatsAppLink,
     fetchProducts,

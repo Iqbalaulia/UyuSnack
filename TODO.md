@@ -50,9 +50,9 @@ Daftar rencana pengembangan landing page Uyu Snack. Urutan berdasarkan prioritas
 | Status | Prioritas | Task | Keterangan | File Terkait |
 |--------|-----------|------|------------|--------------|
 | 🟢 Done | ⚡ Medium | Katalog dinamis dari Supabase | Data produk di-fetch dari Supabase, owner bisa update via dashboard Supabase | `src/lib/supabase.js`, `src/composables/useProducts.js`, `supabase/schema.sql` |
-| 🔴 To Do | ⚡ Medium | Galeri Instagram feed | Embed feed terbaru `@uyu_snack` (manual atau API) | `src/components/InstagramFeed.vue` |
-| 🔴 To Do | 💡 Low | Blog / tips / resep | Konten SEO untuk menarik traffic organik | `src/views/Blog.vue`, `src/data/posts.js` |
-| 🔴 To Do | 💡 Low | Multi-bahasa (ID/EN) | Dukungan Bahasa Inggris untuk pembeli luar negeri | `src/i18n/`, `vue-i18n` |
+| 🟢 Done | ⚡ Medium | Galeri Instagram feed | Grid foto produk yang link ke Instagram @uyu_snack | `src/components/InstagramFeed.vue` |
+| 🟢 Done | 💡 Low | Blog / tips / resep | Section blog dengan artikel tips & resep | `src/components/Blog.vue`, `src/locales/messages.js` |
+| 🟢 Done | 💡 Low | Multi-bahasa (ID/EN) | Dukungan Bahasa Indonesia & Inggris dengan toggle | `src/locales/`, `vue-i18n`, `src/components/LanguageToggle.vue` |
 
 ## Phase 4 — Advanced & Analitik
 
@@ -67,5 +67,6 @@ Daftar rencana pengembangan landing page Uyu Snack. Urutan berdasarkan prioritas
 
 ## Catatan
 
-- Phase 1 sudah selesai: data asli Uyu Snack (produk burnt cheesecake, harga, nomor WA 0812-1659-3329, dan logo) sudah diintegrasikan.
-- Rekomendasi lanjut ke **Phase 2** untuk meningkatkan konversi lebih jauh.
+- Phase 1, 2, dan 3 sudah selesai.
+- Untuk Supabase, pastikan environment variables `VITE_SUPABASE_URL` dan `VITE_SUPABASE_ANON_KEY` sudah diisi di file `.env` lokal dan di dashboard Vercel.
+- Jalankan schema SQL di `supabase/schema.sql` untuk membuat tabel dan seed data.

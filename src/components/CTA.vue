@@ -3,41 +3,41 @@
     <div class="container">
       <SectionReveal>
         <div class="cta__box">
-          <h2 class="cta__title">Yuk, Jajan Uyu Snack Sekarang!</h2>
-          <p class="cta__desc">
-            Jangan sampai kehabisan. Chat kami di Instagram atau WhatsApp untuk pemesanan cepat.
-          </p>
+          <h2 class="cta__title">{{ t('cta.title') }}</h2>
+          <p class="cta__desc">{{ t('cta.description') }}</p>
           <div class="cta__actions">
-          <a
-            :href="waLink"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn cta__btn cta__btn--whatsapp"
-          >
-            <ChatIcon :size="18" /> Pesan via WhatsApp
-          </a>
-          <a
-            href="https://www.instagram.com/uyu_snack/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn cta__btn cta__btn--instagram"
-          >
-            <InstagramIcon :size="18" /> Lihat di Instagram
-          </a>
+            <a
+              :href="waLink"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn cta__btn cta__btn--whatsapp"
+            >
+              <ChatIcon :size="18" /> {{ t('cta.whatsapp') }}
+            </a>
+            <a
+              href="https://www.instagram.com/uyu_snack/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn cta__btn cta__btn--instagram"
+            >
+              <InstagramIcon :size="18" /> {{ t('cta.instagram') }}
+            </a>
+          </div>
         </div>
-      </div>
       </SectionReveal>
     </div>
   </section>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import ChatIcon from './icons/ChatIcon.vue'
 import InstagramIcon from './icons/InstagramIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 import { getWhatsAppLink } from '../data/products.js'
 
-const waLink = getWhatsAppLink('Halo Uyu Snack, saya mau pesan. Apakah bisa dibantu?')
+const { t } = useI18n()
+const waLink = getWhatsAppLink(t('cart.orderMessage'))
 </script>
 
 <style scoped>

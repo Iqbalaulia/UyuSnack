@@ -2,7 +2,7 @@
   <div class="mobile-sticky">
     <a href="#menu" class="mobile-sticky__btn mobile-sticky__btn--menu">
       <MenuIcon :size="18" />
-      <span>Lihat Menu</span>
+      <span>{{ t('nav.menu') }}</span>
     </a>
     <a
       :href="waLink"
@@ -11,17 +11,19 @@
       class="mobile-sticky__btn mobile-sticky__btn--whatsapp"
     >
       <WhatsAppIcon :size="18" />
-      <span>Pesan Sekarang</span>
+      <span>{{ t('menu.order') }}</span>
     </a>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import MenuIcon from './icons/MenuIcon.vue'
 import WhatsAppIcon from './icons/WhatsAppIcon.vue'
 import { getWhatsAppLink } from '../data/products.js'
 
-const waLink = getWhatsAppLink('Halo Uyu Snack, saya mau pesan. Apakah bisa dibantu?')
+const { t } = useI18n()
+const waLink = getWhatsAppLink(t('cart.orderMessage'))
 </script>
 
 <style scoped>

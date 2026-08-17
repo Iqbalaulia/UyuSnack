@@ -2,8 +2,8 @@
   <section id="menu" class="menu section">
     <div class="container">
       <SectionReveal>
-        <h2 class="section-title">Menu Favorit Kami</h2>
-        <p class="section-subtitle">Pilih camilan favoritmu dan pesan langsung dengan mudah.</p>
+        <h2 class="section-title">{{ t('menu.title') }}</h2>
+        <p class="section-subtitle">{{ t('menu.subtitle') }}</p>
       </SectionReveal>
 
       <div class="menu__filters">
@@ -30,8 +30,8 @@
       </div>
 
       <div v-else-if="error && products.length === 0" class="menu__error">
-        <p>Gagal memuat menu. Silakan coba lagi nanti.</p>
-        <button class="btn btn-primary" @click="fetchProducts">Muat Ulang</button>
+        <p>{{ t('menu.error') }}</p>
+        <button class="btn btn-primary" @click="fetchProducts">{{ t('menu.retry') }}</button>
       </div>
 
       <div v-else class="menu__grid">
@@ -60,7 +60,7 @@
                     class="product-card__cart"
                     :class="{ 'product-card__cart--added': isInCart(product.id) }"
                     @click="addToCart(product)"
-                    :aria-label="isInCart(product.id) ? 'Tambah lagi ke keranjang' : 'Tambah ke keranjang'"
+                    :aria-label="isInCart(product.id) ? t('menu.addMore') : t('menu.addToCart')"
                   >
                     <CartIcon :size="16" />
                   </button>
@@ -70,7 +70,7 @@
                     rel="noopener noreferrer"
                     class="product-card__btn"
                   >
-                    Pesan
+                    {{ t('menu.order') }}
                   </a>
                 </div>
               </div>
@@ -80,7 +80,7 @@
       </div>
 
       <div v-if="usingFallback" class="menu__fallback">
-        <p>Menampilkan data lokal karena koneksi ke server terbatas.</p>
+        <p>{{ t('menu.fallback') }}</p>
       </div>
     </div>
   </section>
@@ -88,13 +88,27 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { addToCart, cart } from '../stores/cart.js'
 import { useProducts } from '../composables/useProducts.js'
 import CartIcon from './icons/CartIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 import LazyImage from './LazyImage.vue'
 
-const { products, loading, error, usingFallback, categories, formatPrice, getWhatsAppLink, stockLabels, fetchProducts } = useProducts()
+const { t } = useI18n()
+const { products, loading, error, usingFallback, formatPrice, getWhatsAppLink, fetchProducts } = useProducts()
+
+const categories = computed(() => [
+  { id: 'all', name: t('menu.categories.all') },
+  { id: 'best-seller', name: t('menu.categories.bestSeller') },
+  { id: 'new', name: t('menu.categories.new') },
+])
+
+const stockLabels = computed(() => ({
+  available: { text: t('menu.stock.available'), class: 'stock--available' },
+  preorder: { text: t('menu.stock.preorder'), class: 'stock--preorder' },
+  soldout: { text: t('menu.stock.soldout'), class: 'stock--soldout' },
+}))
 
 const activeCategory = ref('all')
 
@@ -104,7 +118,7 @@ const filteredProducts = computed(() => {
 })
 
 const getOrderLink = (product) => {
-  const message = `Halo Uyu Snack, saya mau pesan ${product.name}. Apakah tersedia?`
+  const message = `${t('cart.orderMessage')}\n- ${product.name}\n${t('cart.availability')}`
   return getWhatsAppLink(message)
 }
 

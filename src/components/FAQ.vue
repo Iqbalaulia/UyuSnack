@@ -2,36 +2,36 @@
   <section id="faq" class="faq section">
     <div class="container">
       <SectionReveal>
-        <h2 class="section-title">Pertanyaan yang Sering Diajukan</h2>
-        <p class="section-subtitle">Temukan jawaban seputar pemesanan dan produk Uyu Snack.</p>
+        <h2 class="section-title">{{ t('faq.title') }}</h2>
+        <p class="section-subtitle">{{ t('faq.subtitle') }}</p>
       </SectionReveal>
 
       <div class="faq__list">
         <SectionReveal
-          v-for="(item, index) in faqs"
-          :key="index"
+          v-for="(key, index) in faqKeys"
+          :key="key"
           :style="{ transitionDelay: `${index * 80}ms` }"
         >
           <div
             class="faq__item"
             :class="{ 'faq__item--open': openIndex === index }"
           >
-          <button
-            class="faq__question"
-            @click="toggle(index)"
-            :aria-expanded="openIndex === index"
-          >
-            <span>{{ item.question }}</span>
-            <span class="faq__icon" :class="{ 'faq__icon--open': openIndex === index }">
-              <ChevronIcon :size="20" />
-            </span>
-          </button>
-          <transition name="faq">
-            <div v-show="openIndex === index" class="faq__answer">
-              <p>{{ item.answer }}</p>
-            </div>
-          </transition>
-        </div>
+            <button
+              class="faq__question"
+              @click="toggle(index)"
+              :aria-expanded="openIndex === index"
+            >
+              <span>{{ t(`faq.items.${key}.q`) }}</span>
+              <span class="faq__icon" :class="{ 'faq__icon--open': openIndex === index }">
+                <ChevronIcon :size="20" />
+              </span>
+            </button>
+            <transition name="faq">
+              <div v-show="openIndex === index" class="faq__answer">
+                <p>{{ t(`faq.items.${key}.a`) }}</p>
+              </div>
+            </transition>
+          </div>
         </SectionReveal>
       </div>
     </div>
@@ -40,8 +40,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import ChevronIcon from './icons/ChevronIcon.vue'
 import SectionReveal from './SectionReveal.vue'
+
+const { t } = useI18n()
 
 const openIndex = ref(0)
 
@@ -49,28 +52,7 @@ const toggle = (index) => {
   openIndex.value = openIndex.value === index ? -1 : index
 }
 
-const faqs = [
-  {
-    question: 'Apakah produk Uyu Snack halal dan tanpa pengawet?',
-    answer: 'Ya, semua produk kami dibuat dengan bahan halal dan tanpa bahan pengawet. Kami prioritaskan kesehatan dan keamanan konsumen.',
-  },
-  {
-    question: 'Berapa lama produk bisa bertahan?',
-    answer: 'Masa simpan bervariasi 3-5 hari tergantung jenis camilan. Setiap kemasan kami cantumkan tanggal produksi dan saran penyimpanan.',
-  },
-  {
-    question: 'Bisa kirim ke luar kota?',
-    answer: 'Belum bisa. Saat ini kami hanya mengakomodir wilayah jakarta saja.',
-  },
-  {
-    question: 'Bisa pesan custom hampers?',
-    answer: 'Belum bisa. Saat ini kami belum bisa custom hampers.',
-  },
-  {
-    question: 'Bagaimana cara pembayarannya?',
-    answer: 'Kami menerima transfer bank, e-wallet, QRIS dan COD untuk area tertentu. Detail rekening akan dikirim setelah pesanan dikonfirmasi.',
-  },
-]
+const faqKeys = ['halal', 'shelfLife', 'shipping', 'hampers', 'payment']
 </script>
 
 <style scoped>

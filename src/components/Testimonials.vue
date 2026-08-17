@@ -2,23 +2,23 @@
   <section class="testimonials section">
     <div class="container">
       <SectionReveal>
-        <h2 class="section-title">Apa Kata Pelanggan?</h2>
-        <p class="section-subtitle">Ulasan dari teman-teman yang sudah mencoba Uyu Snack.</p>
+        <h2 class="section-title">{{ t('testimonials.title') }}</h2>
+        <p class="section-subtitle">{{ t('testimonials.subtitle') }}</p>
       </SectionReveal>
       <div class="testimonials__grid">
         <SectionReveal v-for="(testi, index) in testimonials" :key="testi.name" :style="{ transitionDelay: `${index * 100}ms` }">
           <div class="testimonial-card">
-          <div class="testimonial-card__stars">
-            <StarIcon v-for="n in 5" :key="n" :size="16" />
-          </div>
-          <p class="testimonial-card__text">"{{ testi.text }}"</p>
-          <div class="testimonial-card__author">
-            <LazyImage :src="testi.avatar" :alt="testi.name" class="testimonial-card__avatar" loading="lazy" />
-            <div>
-              <h4 class="testimonial-card__name">{{ testi.name }}</h4>
-              <span class="testimonial-card__role">{{ testi.role }}</span>
+            <div class="testimonial-card__stars">
+              <StarIcon v-for="n in 5" :key="n" :size="16" />
             </div>
-          </div>
+            <p class="testimonial-card__text">"{{ t(`testimonials.items.${testi.key}.text`) }}"</p>
+            <div class="testimonial-card__author">
+              <LazyImage :src="testi.avatar" :alt="testi.name" class="testimonial-card__avatar" loading="lazy" />
+              <div>
+                <h4 class="testimonial-card__name">{{ testi.name }}</h4>
+                <span class="testimonial-card__role">{{ t(`testimonials.items.${testi.key}.role`) }}</span>
+              </div>
+            </div>
           </div>
         </SectionReveal>
       </div>
@@ -27,27 +27,27 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import StarIcon from './icons/StarIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 import LazyImage from './LazyImage.vue'
 
+const { t } = useI18n()
+
 const testimonials = [
   {
-    text: 'Burnt Cheesecake Original-nya enak banget, lembut dan nggak eneg. Sudah repeat order 3 kali!',
+    key: 'dinda',
     name: 'Dinda A.',
-    role: 'Pelanggan Setia',
     avatar: '/assets/burnt-cheesecake-original.jpg',
   },
   {
-    text: 'Chocobery-nya manisnya pas, topping stroberi dan cokelatnya melimpah. Favorit keluarga!',
+    key: 'rizky',
     name: 'Rizky M.',
-    role: 'Pembeli Pertama',
     avatar: '/assets/burnt-cheesecake-chocobery.jpg',
   },
   {
-    text: 'Pesan Chocolate Regal untuk hadiah teman, dikirim tepat waktu dan penerima senang banget.',
+    key: 'siti',
     name: 'Siti N.',
-    role: 'Pembeli Hampers',
     avatar: '/assets/burnt-cheesecake-chocoregal.jpg',
   },
 ]

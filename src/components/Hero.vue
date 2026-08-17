@@ -3,17 +3,16 @@
     <div class="container hero__container">
       <SectionReveal>
         <div class="hero__content">
-        <span class="hero__tag"><SparkleIcon :size="16" /> Homemade & Halal</span>
+        <span class="hero__tag"><SparkleIcon :size="16" /> {{ t('hero.tag') }}</span>
         <h1 class="hero__title">
-          Camilan Lezat untuk Setiap Momen Bahagia
+          {{ t('hero.title') }}
         </h1>
         <p class="hero__description">
-          Uyu Snack menyajikan aneka camilan manis dan gurih buatan rumah dengan bahan berkualitas. 
-          Pesan sekarang, nikmati kelezatannya di rumah!
+          {{ t('hero.description') }}
         </p>
         <div class="hero__actions">
           <a href="#menu" class="btn btn-primary hero__btn">
-            Lihat Menu
+            {{ t('hero.viewMenu') }}
           </a>
           <a
             :href="waLink"
@@ -21,21 +20,21 @@
             rel="noopener noreferrer"
             class="btn btn-secondary hero__btn"
           >
-            Pesan via WhatsApp
+            {{ t('hero.orderWhatsApp') }}
           </a>
         </div>
         <div class="hero__stats">
           <div class="hero__stat">
             <strong>500+</strong>
-            <span>Order Terkirim</span>
+            <span>{{ t('hero.stats.orders') }}</span>
           </div>
           <div class="hero__stat">
             <strong>100%</strong>
-            <span>Homemade</span>
+            <span>{{ t('hero.stats.homemade') }}</span>
           </div>
           <div class="hero__stat">
             <strong>4.9</strong>
-            <span>Rating Puas</span>
+            <span>{{ t('hero.stats.rating') }}</span>
           </div>
         </div>
         </div>
@@ -50,7 +49,7 @@
           />
           <div class="hero__floating-badge">
             <FireIcon :size="18" class="hero__fire" />
-            <p>Best Seller minggu ini</p>
+            <p>{{ t('hero.badge') }}</p>
           </div>
         </div>
         </div>
@@ -60,13 +59,16 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import SparkleIcon from './icons/SparkleIcon.vue'
 import FireIcon from './icons/FireIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 import LazyImage from './LazyImage.vue'
 import { getWhatsAppLink } from '../data/products.js'
 
-const waLink = getWhatsAppLink('Halo Uyu Snack, saya mau pesan. Apakah bisa dibantu?')
+const { t } = useI18n()
+
+const waLink = getWhatsAppLink(t('hero.orderWhatsApp') + ' Uyu Snack')
 </script>
 
 <style scoped>

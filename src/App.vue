@@ -7,6 +7,8 @@
       <Features />
       <ProductCatalog />
       <Testimonials />
+      <InstagramFeed />
+      <Blog />
       <FAQ />
       <HowToOrder />
       <CTA />
@@ -26,6 +28,8 @@ import About from './components/About.vue'
 import Features from './components/Features.vue'
 import ProductCatalog from './components/ProductCatalog.vue'
 import Testimonials from './components/Testimonials.vue'
+import InstagramFeed from './components/InstagramFeed.vue'
+import Blog from './components/Blog.vue'
 import FAQ from './components/FAQ.vue'
 import HowToOrder from './components/HowToOrder.vue'
 import CTA from './components/CTA.vue'

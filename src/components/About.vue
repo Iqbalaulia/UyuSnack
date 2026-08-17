@@ -12,38 +12,35 @@
       </SectionReveal>
       <SectionReveal direction="right">
         <div class="about__content">
-        <span class="about__label">Tentang Kami</span>
-        <h2 class="section-title about__title">Dari Dapur Kecil, untuk Cinta Besar</h2>
-        <p class="about__text">
-          Uyu Snack lahir dari kecintaan kami pada camilan rumahan yang dibuat dengan tangan sendiri. 
-          Setiap gigitan adalah hasil dari resep teruji, bahan pilihan, dan proses higienis.
-        </p>
-        <p class="about__text">
-          Kami percaya camilan bukan sekadar makanan ringan, tapi pembawa kebahagiaan sederhana. 
-          Makanya, setiap pesanan kami kemas dengan penuh perhatian—seolah-olah untuk keluarga sendiri.
-        </p>
-        <ul class="about__list">
-          <li v-for="item in highlights" :key="item">
-            <span class="about__check"><CheckIcon :size="12" /></span>
-            {{ item }}
-          </li>
-        </ul>
-      </div>
+          <span class="about__label">{{ t('about.label') }}</span>
+          <h2 class="section-title about__title">{{ t('about.title') }}</h2>
+          <p class="about__text">{{ t('about.text1') }}</p>
+          <p class="about__text">{{ t('about.text2') }}</p>
+          <ul class="about__list">
+            <li v-for="(item, index) in highlights" :key="index">
+              <span class="about__check"><CheckIcon :size="12" /></span>
+              {{ item }}
+            </li>
+          </ul>
+        </div>
       </SectionReveal>
     </div>
   </section>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import CheckIcon from './icons/CheckIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 import LazyImage from './LazyImage.vue'
 
+const { t } = useI18n()
+
 const highlights = [
-  'Bahan premium & halal',
-  'Dibuat fresh setiap hari',
-  'Kemasan aman & menarik',
-  'Bisa pesan untuk hampers',
+  t('about.highlights[0]'),
+  t('about.highlights[1]'),
+  t('about.highlights[2]'),
+  t('about.highlights[3]'),
 ]
 </script>
 

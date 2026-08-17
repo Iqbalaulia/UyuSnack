@@ -42,16 +42,6 @@ export const clearCart = () => {
   cart.items = []
 }
 
-export const getWhatsAppOrderMessage = () => {
-  if (cart.items.length === 0) return ''
-
-  const lines = cart.items.map(
-    (item) => `- ${item.name} x${item.qty} = ${formatCurrency(item.price * item.qty)}`
-  )
-
-  return `Halo Uyu Snack, saya mau pesan:\n${lines.join('\n')}\n\nTotal: ${formatCurrency(totalPrice.value)}\n\nApakah bisa diproses?`
-}
-
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('id-ID', {
     style: 'currency',

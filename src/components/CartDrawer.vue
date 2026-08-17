@@ -6,16 +6,16 @@
     <transition name="cart-drawer">
       <aside v-if="isOpen" class="cart-drawer">
         <div class="cart-drawer__header">
-          <h3 class="cart-drawer__title">Keranjang Pesanan</h3>
-          <button class="cart-drawer__close" @click="close" aria-label="Tutup keranjang">
+          <h3 class="cart-drawer__title">{{ t('cart.title') }}</h3>
+          <button class="cart-drawer__close" @click="close" :aria-label="t('cart.title')">
             <CloseIcon :size="24" />
           </button>
         </div>
 
         <div v-if="cart.items.length === 0" class="cart-drawer__empty">
           <CartIcon :size="48" />
-          <p>Keranjang masih kosong.</p>
-          <a href="#menu" class="btn btn-primary" @click="close">Lihat Menu</a>
+          <p>{{ t('cart.empty') }}</p>
+          <a href="#menu" class="btn btn-primary" @click="close">{{ t('cart.viewMenu') }}</a>
         </div>
 
         <div v-else class="cart-drawer__body">
@@ -26,12 +26,12 @@
                 <h4 class="cart-item__name">{{ item.name }}</h4>
                 <p class="cart-item__price">{{ formatPrice(item.price) }}</p>
                 <div class="cart-item__qty">
-                  <button @click="updateQty(item.id, item.qty - 1)" aria-label="Kurangi">−</button>
+                  <button @click="updateQty(item.id, item.qty - 1)" aria-label="-">−</button>
                   <span>{{ item.qty }}</span>
-                  <button @click="updateQty(item.id, item.qty + 1)" aria-label="Tambah">+</button>
+                  <button @click="updateQty(item.id, item.qty + 1)" aria-label="+">+</button>
                 </div>
               </div>
-              <button class="cart-item__remove" @click="removeFromCart(item.id)" aria-label="Hapus">
+              <button class="cart-item__remove" @click="removeFromCart(item.id)" aria-label="x">
                 <TrashIcon :size="18" />
               </button>
             </div>
@@ -39,7 +39,7 @@
 
           <div class="cart-drawer__footer">
             <div class="cart-drawer__total">
-              <span>Total</span>
+              <span>{{ t('cart.total') }}</span>
               <strong>{{ formatPrice(totalPrice) }}</strong>
             </div>
             <a
@@ -49,9 +49,9 @@
               class="btn btn-primary cart-drawer__checkout"
               @click="close"
             >
-              Pesan via WhatsApp
+              {{ t('cart.checkout') }}
             </a>
-            <button class="cart-drawer__clear" @click="clearCart">Kosongkan Keranjang</button>
+            <button class="cart-drawer__clear" @click="clearCart">{{ t('cart.clear') }}</button>
           </div>
         </div>
       </aside>
@@ -61,11 +61,14 @@
 
 <script setup>
 import { computed } from 'vue'
-import { cart, removeFromCart, updateQty, clearCart, totalPrice, getWhatsAppOrderMessage } from '../stores/cart.js'
-import { formatPrice } from '../data/products.js'
+import { useI18n } from 'vue-i18n'
+import { cart, removeFromCart, updateQty, clearCart, totalPrice } from '../stores/cart.js'
+import { formatPrice, WHATSAPP_NUMBER } from '../data/products.js'
 import CloseIcon from './icons/CloseIcon.vue'
 import CartIcon from './icons/CartIcon.vue'
 import TrashIcon from './icons/TrashIcon.vue'
+
+const { t } = useI18n()
 
 const props = defineProps({
   isOpen: { type: Boolean, default: false },
@@ -75,8 +78,16 @@ const emit = defineEmits(['close'])
 
 const close = () => emit('close')
 
+const getWhatsAppOrderMessage = () => {
+  if (cart.items.length === 0) return ''
+  const lines = cart.items.map(
+    (item) => `- ${item.name} x${item.qty} = ${formatPrice(item.price * item.qty)}`
+  )
+  return `${t('cart.orderMessage')}\n${lines.join('\n')}\n\n${t('cart.total')}: ${formatPrice(totalPrice.value)}\n\n${t('cart.availability')}`
+}
+
 const orderLink = computed(() => {
-  return `https://wa.me/6281216593329?text=${encodeURIComponent(getWhatsAppOrderMessage())}`
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(getWhatsAppOrderMessage())}`
 })
 </script>
 

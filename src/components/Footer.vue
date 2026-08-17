@@ -6,45 +6,46 @@
           <LogoIcon :size="28" />
           <strong>Uyu Snack</strong>
         </a>
-        <p class="footer__tagline">
-          Camilan homemade manis & gurih untuk momen bahagiamu.
-        </p>
+        <p class="footer__tagline">{{ t('footer.tagline') }}</p>
       </div>
 
       <div class="footer__links">
-        <h4>Menu</h4>
-        <a href="#beranda">Beranda</a>
-        <a href="#tentang">Tentang</a>
-        <a href="#menu">Katalog</a>
-        <a href="#cara-pesan">Cara Pesan</a>
+        <h4>{{ t('footer.menu') }}</h4>
+        <a href="#beranda">{{ t('nav.home') }}</a>
+        <a href="#tentang">{{ t('nav.about') }}</a>
+        <a href="#menu">{{ t('nav.menu') }}</a>
+        <a href="#faq">{{ t('nav.faq') }}</a>
+        <a href="#cara-pesan">{{ t('nav.howToOrder') }}</a>
       </div>
 
       <div class="footer__links">
-        <h4>Kontak</h4>
+        <h4>{{ t('footer.contact') }}</h4>
         <a href="https://www.instagram.com/uyu_snack/" target="_blank" rel="noopener noreferrer">
           Instagram: @uyu_snack
         </a>
         <a :href="waLink" target="_blank" rel="noopener noreferrer">
-          WhatsApp: 0812-1659-3329
+          {{ t('footer.whatsapp') }}: 0812-1659-3329
         </a>
-        <span class="footer__location"><MapPinIcon :size="16" /> Indonesia</span>
+        <span class="footer__location"><MapPinIcon :size="16" /> {{ t('footer.location') }}</span>
       </div>
     </div>
 
     <div class="footer__bottom">
       <div class="container">
-        <p class="footer__love">© {{ new Date().getFullYear() }} Uyu Snack. Dibuat dengan <HeartIcon :size="14" /></p>
+        <p class="footer__love">© {{ new Date().getFullYear() }} Uyu Snack. {{ t('footer.madeWith') }} <HeartIcon :size="14" /></p>
       </div>
     </div>
   </footer>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import LogoIcon from './icons/LogoIcon.vue'
 import MapPinIcon from './icons/MapPinIcon.vue'
 import HeartIcon from './icons/HeartIcon.vue'
 import { WHATSAPP_NUMBER } from '../data/products.js'
 
+const { t } = useI18n()
 const waLink = `https://wa.me/${WHATSAPP_NUMBER}`
 </script>
 

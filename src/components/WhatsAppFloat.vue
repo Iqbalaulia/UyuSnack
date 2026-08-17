@@ -7,15 +7,17 @@
     aria-label="Chat WhatsApp"
   >
     <WhatsAppIcon :size="28" />
-    <span class="whatsapp-float__text">Pesan</span>
+    <span class="whatsapp-float__text">{{ t('menu.order') }}</span>
   </a>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import WhatsAppIcon from './icons/WhatsAppIcon.vue'
 import { getWhatsAppLink } from '../data/products.js'
 
-const waLink = getWhatsAppLink('Halo Uyu Snack, saya mau pesan. Apakah bisa dibantu?')
+const { t } = useI18n()
+const waLink = getWhatsAppLink(t('cart.orderMessage'))
 </script>
 
 <style scoped>

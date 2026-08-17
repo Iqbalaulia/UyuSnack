@@ -6,9 +6,11 @@
         <span class="logo__text">Uyu Snack</span>
       </a>
 
+      <LanguageToggle class="language-toggle--mobile" />
+
       <button
         class="cart-btn"
-        aria-label="Buka keranjang"
+        :aria-label="t('nav.cart')"
         @click="emit('open-cart')"
       >
         <CartIcon :size="22" />
@@ -41,11 +43,12 @@
           rel="noopener noreferrer"
           class="btn btn-primary nav__cta"
         >
-          Instagram
+          {{ t('nav.instagram') }}
         </a>
+        <LanguageToggle class="nav__language" />
         <button
           class="cart-btn cart-btn--desktop"
-          aria-label="Buka keranjang"
+          :aria-label="t('nav.cart')"
           @click="emit('open-cart')"
         >
           <CartIcon :size="22" />
@@ -57,22 +60,27 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import LogoIcon from './icons/LogoIcon.vue'
 import CartIcon from './icons/CartIcon.vue'
+import LanguageToggle from './LanguageToggle.vue'
 import { totalItems } from '../stores/cart.js'
+
+const { t } = useI18n()
 
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
 
 const emit = defineEmits(['open-cart'])
 
-const menuItems = [
-  { label: 'Beranda', href: '#beranda' },
-  { label: 'Tentang', href: '#tentang' },
-  { label: 'Menu', href: '#menu' },
-  { label: 'Cara Pesan', href: '#cara-pesan' },
-]
+const menuItems = computed(() => [
+  { label: t('nav.home'), href: '#beranda' },
+  { label: t('nav.about'), href: '#tentang' },
+  { label: t('nav.menu'), href: '#menu' },
+  { label: t('nav.faq'), href: '#faq' },
+  { label: t('nav.howToOrder'), href: '#cara-pesan' },
+])
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 20
@@ -155,6 +163,23 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.language-toggle--mobile {
+  display: inline-flex;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .language-toggle--mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .nav__language {
+    display: none;
+  }
 }
 
 .menu-toggle {

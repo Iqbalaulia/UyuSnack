@@ -2,18 +2,18 @@
   <section class="features section">
     <div class="container">
       <SectionReveal>
-        <h2 class="section-title">Kenapa Memilih Uyu Snack?</h2>
-        <p class="section-subtitle">Kami fokus pada kualitas, rasa, dan pengalaman terbaik untukmu.</p>
+        <h2 class="section-title">{{ t('features.title') }}</h2>
+        <p class="section-subtitle">{{ t('features.subtitle') }}</p>
       </SectionReveal>
       <div class="features__grid">
-        <SectionReveal v-for="(feature, index) in features" :key="feature.title" :style="{ transitionDelay: `${index * 100}ms` }">
+        <SectionReveal v-for="(feature, index) in features" :key="feature.key" :style="{ transitionDelay: `${index * 100}ms` }">
           <div class="feature-card">
-          <div class="feature-card__icon">
-            <component :is="feature.icon" :size="40" />
+            <div class="feature-card__icon">
+              <component :is="feature.icon" :size="40" />
+            </div>
+            <h3 class="feature-card__title">{{ t(`features.items.${feature.key}.title`) }}</h3>
+            <p class="feature-card__desc">{{ t(`features.items.${feature.key}.desc`) }}</p>
           </div>
-          <h3 class="feature-card__title">{{ feature.title }}</h3>
-          <p class="feature-card__desc">{{ feature.description }}</p>
-        </div>
         </SectionReveal>
       </div>
     </div>
@@ -21,32 +21,31 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import HomemadeIcon from './icons/HomemadeIcon.vue'
 import PackageIcon from './icons/PackageIcon.vue'
 import PriceIcon from './icons/PriceIcon.vue'
 import HampersIcon from './icons/HampersIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 
+const { t } = useI18n()
+
 const features = [
   {
     icon: HomemadeIcon,
-    title: 'Homemade',
-    description: 'Dibuat di dapur sendiri tanpa bahan pengawet, lebih sehat dan terjaga kebersihannya.',
+    key: 'homemade',
   },
   {
     icon: PackageIcon,
-    title: 'Kemasan Aman',
-    description: 'Setiap produk dikemas rapat dan higienis, cocok untuk dikirim ke luar kota.',
+    key: 'packaging',
   },
   {
     icon: PriceIcon,
-    title: 'Harga Bersahabat',
-    description: 'Camilan berkualitas dengan harga terjangkau, pas di kantong pelajar & karyawan.',
+    key: 'price',
   },
   {
     icon: HampersIcon,
-    title: 'Bisa Custom Hampers',
-    description: 'Pilih isi dan desain kemasan sesuai kebutuhan untuk hadiah atau acara spesial.',
+    key: 'hampers',
   },
 ]
 </script>

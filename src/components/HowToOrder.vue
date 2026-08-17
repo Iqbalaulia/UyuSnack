@@ -2,19 +2,19 @@
   <section id="cara-pesan" class="how-to section">
     <div class="container">
       <SectionReveal>
-        <h2 class="section-title">Cara Pesan</h2>
-        <p class="section-subtitle">Pesananmu hanya butuh 3 langkah mudah.</p>
+        <h2 class="section-title">{{ t('howToOrder.title') }}</h2>
+        <p class="section-subtitle">{{ t('howToOrder.subtitle') }}</p>
       </SectionReveal>
       <div class="how-to__steps">
-        <SectionReveal v-for="(step, index) in steps" :key="index" :style="{ transitionDelay: `${index * 120}ms` }">
+        <SectionReveal v-for="(step, index) in steps" :key="step.key" :style="{ transitionDelay: `${index * 120}ms` }">
           <div class="step-card">
-          <div class="step-card__number">{{ index + 1 }}</div>
-          <div class="step-card__icon">
-            <component :is="step.icon" :size="40" />
+            <div class="step-card__number">{{ index + 1 }}</div>
+            <div class="step-card__icon">
+              <component :is="step.icon" :size="40" />
+            </div>
+            <h3 class="step-card__title">{{ t(`howToOrder.steps.${step.key}.title`) }}</h3>
+            <p class="step-card__desc">{{ t(`howToOrder.steps.${step.key}.desc`) }}</p>
           </div>
-          <h3 class="step-card__title">{{ step.title }}</h3>
-          <p class="step-card__desc">{{ step.description }}</p>
-        </div>
         </SectionReveal>
       </div>
     </div>
@@ -22,27 +22,18 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import MenuIcon from './icons/MenuIcon.vue'
 import ChatIcon from './icons/ChatIcon.vue'
 import TruckIcon from './icons/TruckIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 
+const { t } = useI18n()
+
 const steps = [
-  {
-    icon: MenuIcon,
-    title: 'Pilih Menu',
-    description: 'Lihat katalog menu dan pilih camilan favoritmu.',
-  },
-  {
-    icon: ChatIcon,
-    title: 'Chat WhatsApp',
-    description: 'Klik tombol pesan, otomatis terhubung ke WhatsApp kami.',
-  },
-  {
-    icon: TruckIcon,
-    title: 'Tunggu Diantar',
-    description: 'Konfirmasi pembayaran, lalu kami proses dan kirim pesananmu.',
-  },
+  { icon: MenuIcon, key: 'choose' },
+  { icon: ChatIcon, key: 'chat' },
+  { icon: TruckIcon, key: 'delivery' },
 ]
 </script>
 

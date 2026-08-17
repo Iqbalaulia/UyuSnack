@@ -1,9 +1,3 @@
-export const categories = [
-  { id: "all", name: "Semua" },
-  { id: "best-seller", name: "Best Seller" },
-  { id: "new", name: "New Variant" },
-];
-
 export const products = [
   {
     id: 1,
@@ -39,12 +33,6 @@ export const products = [
     stock: "preorder",
   },
 ];
-
-export const stockLabels = {
-  available: { text: "Tersedia", class: "stock--available" },
-  preorder: { text: "Pre-Order 1–3 Hari", class: "stock--preorder" },
-  soldout: { text: "Stok Habis", class: "stock--soldout" },
-};
 
 export const formatPrice = (price) => {
   return new Intl.NumberFormat("id-ID", {
