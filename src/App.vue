@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <Navbar />
+    <Navbar @open-cart="isCartOpen = true" />
     <main>
       <Hero />
       <About />
@@ -14,10 +14,12 @@
     <Footer />
     <WhatsAppFloat />
     <MobileStickyBar />
+    <CartDrawer :is-open="isCartOpen" @close="isCartOpen = false" />
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import Navbar from './components/Navbar.vue'
 import Hero from './components/Hero.vue'
 import About from './components/About.vue'
@@ -30,4 +32,7 @@ import CTA from './components/CTA.vue'
 import Footer from './components/Footer.vue'
 import WhatsAppFloat from './components/WhatsAppFloat.vue'
 import MobileStickyBar from './components/MobileStickyBar.vue'
+import CartDrawer from './components/CartDrawer.vue'
+
+const isCartOpen = ref(false)
 </script>

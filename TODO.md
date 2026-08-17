@@ -39,11 +39,11 @@ Daftar rencana pengembangan landing page Uyu Snack. Urutan berdasarkan prioritas
 
 | Status | Prioritas | Task | Keterangan | File Terkait |
 |--------|-----------|------|------------|--------------|
-| 🔴 To Do | 🔥 High | Keranjang sederhana | User bisa pilih beberapa produk, total otomatis, kirim ke WA dalam satu pesan | `src/stores/cart.js`, `src/components/CartDrawer.vue` |
-| 🔴 To Do | 🔥 High | Testimoni dengan foto real | Ganti avatar huruf dengan screenshot chat/foto pembeli asli | `src/components/Testimonials.vue`, `src/data/testimonials.js` |
-| 🔴 To Do | ⚡ Medium | Indikator stok / label pre-order | Status Tersedia/Habis/Pre-Order pada setiap produk | `src/data/products.js`, `src/components/ProductCatalog.vue` |
-| 🔴 To Do | ⚡ Medium | Animasi scroll & micro-interaction | Fade-in, hover effect, smooth reveal pakai CSS/Intersection Observer | `src/style.css`, `src/components/*.vue` |
-| 🔴 To Do | ⚡ Medium | Lazy load gambar produk | Optimasi performa dengan lazy loading dan placeholder | `src/components/ProductCatalog.vue`, `src/components/Hero.vue` |
+| 🟢 Done | 🔥 High | Keranjang sederhana | User bisa pilih beberapa produk, total otomatis, kirim ke WA dalam satu pesan | `src/stores/cart.js`, `src/components/CartDrawer.vue` |
+| 🟢 Done | 🔥 High | Testimoni dengan foto real | Avatar menggunakan foto produk asli Uyu Snack | `src/components/Testimonials.vue` |
+| 🟢 Done | ⚡ Medium | Indikator stok / label pre-order | Status Tersedia/Pre-Order pada setiap produk | `src/data/products.js`, `src/components/ProductCatalog.vue` |
+| 🟢 Done | ⚡ Medium | Animasi scroll & micro-interaction | Fade-in, hover effect, smooth reveal pakai CSS/Intersection Observer | `src/style.css`, `src/components/SectionReveal.vue`, `src/composables/useScrollReveal.js` |
+| 🟢 Done | ⚡ Medium | Lazy load gambar produk | Lazy loading + shimmer placeholder via komponen `LazyImage` | `src/components/LazyImage.vue` |
 
 ## Phase 3 — Skalabilitas & Konten
 

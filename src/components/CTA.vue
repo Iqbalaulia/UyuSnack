@@ -1,12 +1,13 @@
 <template>
   <section class="cta section">
     <div class="container">
-      <div class="cta__box">
-        <h2 class="cta__title">Yuk, Jajan Uyu Snack Sekarang!</h2>
-        <p class="cta__desc">
-          Jangan sampai kehabisan. Chat kami di Instagram atau WhatsApp untuk pemesanan cepat.
-        </p>
-        <div class="cta__actions">
+      <SectionReveal>
+        <div class="cta__box">
+          <h2 class="cta__title">Yuk, Jajan Uyu Snack Sekarang!</h2>
+          <p class="cta__desc">
+            Jangan sampai kehabisan. Chat kami di Instagram atau WhatsApp untuk pemesanan cepat.
+          </p>
+          <div class="cta__actions">
           <a
             :href="waLink"
             target="_blank"
@@ -25,6 +26,7 @@
           </a>
         </div>
       </div>
+      </SectionReveal>
     </div>
   </section>
 </template>
@@ -32,6 +34,7 @@
 <script setup>
 import ChatIcon from './icons/ChatIcon.vue'
 import InstagramIcon from './icons/InstagramIcon.vue'
+import SectionReveal from './SectionReveal.vue'
 import { getWhatsAppLink } from '../data/products.js'
 
 const waLink = getWhatsAppLink('Halo Uyu Snack, saya mau pesan. Apakah bisa dibantu?')

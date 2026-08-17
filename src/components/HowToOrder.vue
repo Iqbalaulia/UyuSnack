@@ -1,10 +1,13 @@
 <template>
   <section id="cara-pesan" class="how-to section">
     <div class="container">
-      <h2 class="section-title">Cara Pesan</h2>
-      <p class="section-subtitle">Pesananmu hanya butuh 3 langkah mudah.</p>
+      <SectionReveal>
+        <h2 class="section-title">Cara Pesan</h2>
+        <p class="section-subtitle">Pesananmu hanya butuh 3 langkah mudah.</p>
+      </SectionReveal>
       <div class="how-to__steps">
-        <div v-for="(step, index) in steps" :key="index" class="step-card">
+        <SectionReveal v-for="(step, index) in steps" :key="index" :style="{ transitionDelay: `${index * 120}ms` }">
+          <div class="step-card">
           <div class="step-card__number">{{ index + 1 }}</div>
           <div class="step-card__icon">
             <component :is="step.icon" :size="40" />
@@ -12,6 +15,7 @@
           <h3 class="step-card__title">{{ step.title }}</h3>
           <p class="step-card__desc">{{ step.description }}</p>
         </div>
+        </SectionReveal>
       </div>
     </div>
   </section>
@@ -21,6 +25,7 @@
 import MenuIcon from './icons/MenuIcon.vue'
 import ChatIcon from './icons/ChatIcon.vue'
 import TruckIcon from './icons/TruckIcon.vue'
+import SectionReveal from './SectionReveal.vue'
 
 const steps = [
   {

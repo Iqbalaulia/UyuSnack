@@ -1,14 +1,17 @@
 <template>
   <section id="tentang" class="about section">
     <div class="container about__container">
-      <div class="about__image">
-        <img
-          src="/assets/images/about.webp"
-          alt="Logo Uyu Snack"
-          loading="lazy"
-        />
-      </div>
-      <div class="about__content">
+      <SectionReveal direction="left">
+        <div class="about__image">
+          <LazyImage
+            src="/assets/images/about.webp"
+            alt="Logo Uyu Snack"
+            loading="lazy"
+          />
+        </div>
+      </SectionReveal>
+      <SectionReveal direction="right">
+        <div class="about__content">
         <span class="about__label">Tentang Kami</span>
         <h2 class="section-title about__title">Dari Dapur Kecil, untuk Cinta Besar</h2>
         <p class="about__text">
@@ -26,12 +29,15 @@
           </li>
         </ul>
       </div>
+      </SectionReveal>
     </div>
   </section>
 </template>
 
 <script setup>
 import CheckIcon from './icons/CheckIcon.vue'
+import SectionReveal from './SectionReveal.vue'
+import LazyImage from './LazyImage.vue'
 
 const highlights = [
   'Bahan premium & halal',

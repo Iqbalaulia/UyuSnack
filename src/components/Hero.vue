@@ -1,7 +1,8 @@
 <template>
   <section id="beranda" class="hero">
     <div class="container hero__container">
-      <div class="hero__content">
+      <SectionReveal>
+        <div class="hero__content">
         <span class="hero__tag"><SparkleIcon :size="16" /> Homemade & Halal</span>
         <h1 class="hero__title">
           Camilan Lezat untuk Setiap Momen Bahagia
@@ -37,10 +38,12 @@
             <span>Rating Puas</span>
           </div>
         </div>
-      </div>
-      <div class="hero__image">
-        <div class="hero__image-wrapper">
-          <img
+        </div>
+      </SectionReveal>
+      <SectionReveal direction="right">
+        <div class="hero__image">
+          <div class="hero__image-wrapper">
+          <LazyImage
             src="/assets/hero-menu.jpg"
             alt="Daftar menu Uyu Snack"
             loading="eager"
@@ -50,7 +53,8 @@
             <p>Best Seller minggu ini</p>
           </div>
         </div>
-      </div>
+        </div>
+      </SectionReveal>
     </div>
   </section>
 </template>
@@ -58,6 +62,8 @@
 <script setup>
 import SparkleIcon from './icons/SparkleIcon.vue'
 import FireIcon from './icons/FireIcon.vue'
+import SectionReveal from './SectionReveal.vue'
+import LazyImage from './LazyImage.vue'
 import { getWhatsAppLink } from '../data/products.js'
 
 const waLink = getWhatsAppLink('Halo Uyu Snack, saya mau pesan. Apakah bisa dibantu?')

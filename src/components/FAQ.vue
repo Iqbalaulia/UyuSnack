@@ -1,16 +1,21 @@
 <template>
   <section id="faq" class="faq section">
     <div class="container">
-      <h2 class="section-title">Pertanyaan yang Sering Diajukan</h2>
-      <p class="section-subtitle">Temukan jawaban seputar pemesanan dan produk Uyu Snack.</p>
+      <SectionReveal>
+        <h2 class="section-title">Pertanyaan yang Sering Diajukan</h2>
+        <p class="section-subtitle">Temukan jawaban seputar pemesanan dan produk Uyu Snack.</p>
+      </SectionReveal>
 
       <div class="faq__list">
-        <div
+        <SectionReveal
           v-for="(item, index) in faqs"
           :key="index"
-          class="faq__item"
-          :class="{ 'faq__item--open': openIndex === index }"
+          :style="{ transitionDelay: `${index * 80}ms` }"
         >
+          <div
+            class="faq__item"
+            :class="{ 'faq__item--open': openIndex === index }"
+          >
           <button
             class="faq__question"
             @click="toggle(index)"
@@ -27,6 +32,7 @@
             </div>
           </transition>
         </div>
+        </SectionReveal>
       </div>
     </div>
   </section>
@@ -35,6 +41,7 @@
 <script setup>
 import { ref } from 'vue'
 import ChevronIcon from './icons/ChevronIcon.vue'
+import SectionReveal from './SectionReveal.vue'
 
 const openIndex = ref(0)
 

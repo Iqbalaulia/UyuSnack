@@ -7,6 +7,15 @@
       </a>
 
       <button
+        class="cart-btn"
+        aria-label="Buka keranjang"
+        @click="emit('open-cart')"
+      >
+        <CartIcon :size="22" />
+        <span v-if="totalItems > 0" class="cart-btn__badge">{{ totalItems }}</span>
+      </button>
+
+      <button
         class="menu-toggle"
         aria-label="Toggle menu"
         @click="isMenuOpen = !isMenuOpen"
@@ -34,6 +43,14 @@
         >
           Instagram
         </a>
+        <button
+          class="cart-btn cart-btn--desktop"
+          aria-label="Buka keranjang"
+          @click="emit('open-cart')"
+        >
+          <CartIcon :size="22" />
+          <span v-if="totalItems > 0" class="cart-btn__badge">{{ totalItems }}</span>
+        </button>
       </nav>
     </div>
   </header>
@@ -42,9 +59,13 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import LogoIcon from './icons/LogoIcon.vue'
+import CartIcon from './icons/CartIcon.vue'
+import { totalItems } from '../stores/cart.js'
 
 const isMenuOpen = ref(false)
 const isScrolled = ref(false)
+
+const emit = defineEmits(['open-cart'])
 
 const menuItems = [
   { label: 'Beranda', href: '#beranda' },
@@ -103,6 +124,37 @@ onUnmounted(() => {
 .logo__icon {
   flex-shrink: 0;
   color: var(--color-primary);
+}
+
+.cart-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-dark);
+  padding: 0.5rem;
+  margin-left: auto;
+}
+
+.cart-btn--desktop {
+  display: none;
+}
+
+.cart-btn__badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  padding: 0 0.25rem;
+  background: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menu-toggle {
@@ -173,6 +225,15 @@ onUnmounted(() => {
 @media (min-width: 768px) {
   .menu-toggle {
     display: none;
+  }
+
+  .cart-btn:not(.cart-btn--desktop) {
+    display: none;
+  }
+
+  .cart-btn--desktop {
+    display: inline-flex;
+    margin-left: 0;
   }
 
   .nav {

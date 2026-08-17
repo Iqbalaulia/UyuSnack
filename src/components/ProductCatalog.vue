@@ -1,8 +1,10 @@
 <template>
   <section id="menu" class="menu section">
     <div class="container">
-      <h2 class="section-title">Menu Favorit Kami</h2>
-      <p class="section-subtitle">Pilih camilan favoritmu dan pesan langsung dengan mudah.</p>
+      <SectionReveal>
+        <h2 class="section-title">Menu Favorit Kami</h2>
+        <p class="section-subtitle">Pilih camilan favoritmu dan pesan langsung dengan mudah.</p>
+      </SectionReveal>
 
       <div class="menu__filters">
         <button
@@ -17,27 +19,48 @@
       </div>
 
       <div class="menu__grid">
-        <div v-for="product in filteredProducts" :key="product.id" class="product-card">
+        <SectionReveal v-for="(product, index) in filteredProducts" :key="product.id" :style="{ transitionDelay: `${index * 100}ms` }">
+          <div class="product-card">
           <div class="product-card__image">
-            <img :src="product.image" :alt="product.name" loading="lazy" />
+            <LazyImage :src="product.image" :alt="product.name" loading="lazy" />
             <span v-if="product.badge" class="product-card__badge">{{ product.badge }}</span>
           </div>
           <div class="product-card__body">
-            <h3 class="product-card__name">{{ product.name }}</h3>
+            <div class="product-card__meta">
+              <h3 class="product-card__name">{{ product.name }}</h3>
+              <span
+                v-if="product.stock"
+                class="product-card__stock"
+                :class="stockLabels[product.stock].class"
+              >
+                {{ stockLabels[product.stock].text }}
+              </span>
+            </div>
             <p class="product-card__desc">{{ product.description }}</p>
             <div class="product-card__footer">
               <span class="product-card__price">{{ formatPrice(product.price) }}</span>
-              <a
-                :href="getOrderLink(product)"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="product-card__btn"
-              >
-                Pesan
-              </a>
+              <div class="product-card__actions">
+                <button
+                  class="product-card__cart"
+                  :class="{ 'product-card__cart--added': isInCart(product.id) }"
+                  @click="addToCart(product)"
+                  :aria-label="isInCart(product.id) ? 'Tambah lagi ke keranjang' : 'Tambah ke keranjang'"
+                >
+                  <CartIcon :size="16" />
+                </button>
+                <a
+                  :href="getOrderLink(product)"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="product-card__btn"
+                >
+                  Pesan
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+          </div>
+        </SectionReveal>
       </div>
     </div>
   </section>
@@ -45,7 +68,11 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { categories, products, formatPrice, getWhatsAppLink } from '../data/products.js'
+import { categories, products, formatPrice, getWhatsAppLink, stockLabels } from '../data/products.js'
+import { addToCart, cart } from '../stores/cart.js'
+import CartIcon from './icons/CartIcon.vue'
+import SectionReveal from './SectionReveal.vue'
+import LazyImage from './LazyImage.vue'
 
 const activeCategory = ref('all')
 
@@ -57,6 +84,10 @@ const filteredProducts = computed(() => {
 const getOrderLink = (product) => {
   const message = `Halo Uyu Snack, saya mau pesan ${product.name}. Apakah tersedia?`
   return getWhatsAppLink(message)
+}
+
+const isInCart = (productId) => {
+  return cart.items.some((item) => item.id === productId)
 }
 </script>
 
@@ -148,10 +179,40 @@ const getOrderLink = (product) => {
   padding: 1.25rem;
 }
 
+.product-card__meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
 .product-card__name {
   font-size: 1.1rem;
   font-weight: 800;
-  margin-bottom: 0.25rem;
+}
+
+.product-card__stock {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.stock--available {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.stock--preorder {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.stock--soldout {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 .product-card__desc {
@@ -171,6 +232,30 @@ const getOrderLink = (product) => {
   font-weight: 800;
   color: var(--color-primary-dark);
   font-size: 1rem;
+}
+
+.product-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.product-card__cart {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  color: var(--color-primary-dark);
+  transition: var(--transition);
+}
+
+.product-card__cart:hover,
+.product-card__cart--added {
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 .product-card__btn {

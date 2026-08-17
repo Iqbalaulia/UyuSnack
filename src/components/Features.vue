@@ -1,16 +1,20 @@
 <template>
   <section class="features section">
     <div class="container">
-      <h2 class="section-title">Kenapa Memilih Uyu Snack?</h2>
-      <p class="section-subtitle">Kami fokus pada kualitas, rasa, dan pengalaman terbaik untukmu.</p>
+      <SectionReveal>
+        <h2 class="section-title">Kenapa Memilih Uyu Snack?</h2>
+        <p class="section-subtitle">Kami fokus pada kualitas, rasa, dan pengalaman terbaik untukmu.</p>
+      </SectionReveal>
       <div class="features__grid">
-        <div v-for="feature in features" :key="feature.title" class="feature-card">
+        <SectionReveal v-for="(feature, index) in features" :key="feature.title" :style="{ transitionDelay: `${index * 100}ms` }">
+          <div class="feature-card">
           <div class="feature-card__icon">
             <component :is="feature.icon" :size="40" />
           </div>
           <h3 class="feature-card__title">{{ feature.title }}</h3>
           <p class="feature-card__desc">{{ feature.description }}</p>
         </div>
+        </SectionReveal>
       </div>
     </div>
   </section>
@@ -21,6 +25,7 @@ import HomemadeIcon from './icons/HomemadeIcon.vue'
 import PackageIcon from './icons/PackageIcon.vue'
 import PriceIcon from './icons/PriceIcon.vue'
 import HampersIcon from './icons/HampersIcon.vue'
+import SectionReveal from './SectionReveal.vue'
 
 const features = [
   {
