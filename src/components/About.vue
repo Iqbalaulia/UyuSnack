@@ -5,7 +5,7 @@
         <div class="about__image">
           <LazyImage
             src="/assets/images/about.jpg"
-            alt="Logo Uyu Snack"
+            alt="Tentang Uyu Snack"
             loading="lazy"
           />
         </div>
