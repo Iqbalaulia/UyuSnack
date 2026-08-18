@@ -34,7 +34,7 @@ import { useI18n } from 'vue-i18n'
 import ChatIcon from './icons/ChatIcon.vue'
 import InstagramIcon from './icons/InstagramIcon.vue'
 import SectionReveal from './SectionReveal.vue'
-import { getWhatsAppLink } from '../data/products.js'
+import { getWhatsAppLink } from '../data/products.ts'
 
 const { t } = useI18n()
 const waLink = getWhatsAppLink(t('cart.orderMessage'))

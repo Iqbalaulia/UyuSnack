@@ -6,7 +6,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useScrollReveal } from '../composables/useScrollReveal.js'
+import { useScrollReveal } from '../composables/useScrollReveal.ts'
 
 const props = defineProps({
   direction: { type: String, default: 'up' },

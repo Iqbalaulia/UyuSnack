@@ -14,7 +14,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { availableLocales } from '../locales/index.js'
+import { availableLocales } from '../locales/index.ts'
 
 const { locale } = useI18n()
 

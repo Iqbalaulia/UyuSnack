@@ -64,7 +64,7 @@ import SparkleIcon from './icons/SparkleIcon.vue'
 import FireIcon from './icons/FireIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 import LazyImage from './LazyImage.vue'
-import { getWhatsAppLink } from '../data/products.js'
+import { getWhatsAppLink } from '../data/products.ts'
 
 const { t } = useI18n()
 

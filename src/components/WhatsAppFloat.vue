@@ -14,7 +14,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import WhatsAppIcon from './icons/WhatsAppIcon.vue'
-import { getWhatsAppLink } from '../data/products.js'
+import { getWhatsAppLink } from '../data/products.ts'
 
 const { t } = useI18n()
 const waLink = getWhatsAppLink(t('cart.orderMessage'))

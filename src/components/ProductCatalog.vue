@@ -89,8 +89,8 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { addToCart, cart } from '../stores/cart.js'
-import { useProducts } from '../composables/useProducts.js'
+import { addToCart, cart } from '../stores/cart.ts'
+import { useProducts } from '../composables/useProducts.ts'
 import CartIcon from './icons/CartIcon.vue'
 import SectionReveal from './SectionReveal.vue'
 import LazyImage from './LazyImage.vue'

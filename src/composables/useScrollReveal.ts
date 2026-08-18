@@ -1,10 +1,16 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
-export function useScrollReveal(options = {}) {
-  const el = ref(null)
-  const isVisible = ref(false)
+interface UseScrollRevealOptions {
+  once?: boolean
+  threshold?: number
+  rootMargin?: string
+}
 
-  let observer = null
+export function useScrollReveal(options: UseScrollRevealOptions = {}) {
+  const el = ref<HTMLElement | null>(null)
+  const isVisible = ref<boolean>(false)
+
+  let observer: IntersectionObserver | null = null
 
   onMounted(() => {
     if (!el.value) return
@@ -13,8 +19,8 @@ export function useScrollReveal(options = {}) {
       ([entry]) => {
         if (entry.isIntersecting) {
           isVisible.value = true
-          if (options.once !== false) {
-            observer.unobserve(el.value)
+          if (options.once !== false && el.value) {
+            observer!.unobserve(el.value)
           }
         } else if (options.once === false) {
           isVisible.value = false

@@ -62,8 +62,8 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { cart, removeFromCart, updateQty, clearCart, totalPrice } from '../stores/cart.js'
-import { formatPrice, WHATSAPP_NUMBER } from '../data/products.js'
+import { cart, removeFromCart, updateQty, clearCart, totalPrice } from '../stores/cart.ts'
+import { formatPrice, WHATSAPP_NUMBER } from '../data/products.ts'
 import CloseIcon from './icons/CloseIcon.vue'
 import CartIcon from './icons/CartIcon.vue'
 import TrashIcon from './icons/TrashIcon.vue'

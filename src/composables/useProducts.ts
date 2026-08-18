@@ -1,12 +1,18 @@
 import { ref, onMounted } from 'vue'
-import { supabase } from '../lib/supabase.js'
-import { products as localProducts, formatPrice, WHATSAPP_NUMBER, getWhatsAppLink } from '../data/products.js'
+import { supabase } from '../lib/supabase'
+import {
+  products as localProducts,
+  formatPrice,
+  WHATSAPP_NUMBER,
+  getWhatsAppLink,
+  type Product,
+} from '../data/products'
 
 export function useProducts() {
-  const products = ref([])
-  const loading = ref(true)
-  const error = ref(null)
-  const usingFallback = ref(false)
+  const products = ref<Product[]>([])
+  const loading = ref<boolean>(true)
+  const error = ref<string | null>(null)
+  const usingFallback = ref<boolean>(false)
 
   const fetchProducts = async () => {
     loading.value = true
@@ -22,16 +28,16 @@ export function useProducts() {
       if (supaError) throw supaError
 
       if (data && data.length > 0) {
-        products.value = data
+        products.value = data as Product[]
         usingFallback.value = false
       } else {
         throw new Error('No products found')
       }
     } catch (err) {
-      console.warn('Failed to fetch products from Supabase:', err.message)
+      console.warn('Failed to fetch products from Supabase:', (err as Error).message)
       products.value = localProducts
       usingFallback.value = true
-      error.value = err.message
+      error.value = (err as Error).message
     } finally {
       loading.value = false
     }

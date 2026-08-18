@@ -1,4 +1,15 @@
-export const products = [
+export interface Product {
+  id: number
+  name: string
+  category: string
+  price: number
+  description: string
+  image: string
+  badge: string
+  stock: string
+}
+
+export const products: Product[] = [
   {
     id: 1,
     name: "Burnt Cheesecake Original",
@@ -34,7 +45,7 @@ export const products = [
   },
 ];
 
-export const formatPrice = (price) => {
+export const formatPrice = (price: number): string => {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
@@ -44,6 +55,6 @@ export const formatPrice = (price) => {
 
 export const WHATSAPP_NUMBER = "6281216593329";
 
-export const getWhatsAppLink = (message) => {
+export const getWhatsAppLink = (message: string): string => {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 };

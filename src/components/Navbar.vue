@@ -65,7 +65,7 @@ import { useI18n } from 'vue-i18n'
 import LogoIcon from './icons/LogoIcon.vue'
 import CartIcon from './icons/CartIcon.vue'
 import LanguageToggle from './LanguageToggle.vue'
-import { totalItems } from '../stores/cart.js'
+import { totalItems } from '../stores/cart.ts'
 
 const { t } = useI18n()
 

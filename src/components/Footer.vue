@@ -43,7 +43,7 @@ import { useI18n } from 'vue-i18n'
 import LogoIcon from './icons/LogoIcon.vue'
 import MapPinIcon from './icons/MapPinIcon.vue'
 import HeartIcon from './icons/HeartIcon.vue'
-import { WHATSAPP_NUMBER } from '../data/products.js'
+import { WHATSAPP_NUMBER } from '../data/products.ts'
 
 const { t } = useI18n()
 const waLink = `https://wa.me/${WHATSAPP_NUMBER}`
