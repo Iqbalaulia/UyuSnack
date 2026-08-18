@@ -11,6 +11,7 @@
       <Blog />
       <FAQ />
       <HowToOrder />
+      <Shipping />
       <CTA />
     </main>
     <Footer />
@@ -32,6 +33,7 @@ import InstagramFeed from './components/InstagramFeed.vue'
 import Blog from './components/Blog.vue'
 import FAQ from './components/FAQ.vue'
 import HowToOrder from './components/HowToOrder.vue'
+import Shipping from './components/Shipping.vue'
 import CTA from './components/CTA.vue'
 import Footer from './components/Footer.vue'
 import WhatsAppFloat from './components/WhatsAppFloat.vue'

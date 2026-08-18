@@ -79,20 +79,10 @@ export const id = {
   testimonials: {
     title: 'Apa Kata Pelanggan?',
     subtitle: 'Ulasan dari teman-teman yang sudah mencoba Uyu Snack.',
-    items: {
-      dinda: {
-        text: 'Burnt Cheesecake Original-nya enak banget, lembut dan nggak eneg. Sudah repeat order 3 kali!',
-        role: 'Pelanggan Setia',
-      },
-      rizky: {
-        text: 'Chocobery-nya manisnya pas, topping stroberi dan cokelatnya melimpah. Favorit keluarga!',
-        role: 'Pembeli Pertama',
-      },
-      siti: {
-        text: 'Pesan Chocolate Regal untuk hadiah teman, dikirim tepat waktu dan penerima senang banget.',
-        role: 'Pembeli Hampers',
-      },
-    },
+    loading: 'Memuat ulasan...',
+    error: 'Gagal memuat ulasan. Silakan coba lagi nanti.',
+    retry: 'Muat Ulang',
+    fallback: 'Menampilkan data lokal karena koneksi ke server terbatas.',
   },
   faq: {
     title: 'Pertanyaan yang Sering Diajukan',
@@ -108,7 +98,7 @@ export const id = {
       },
       shipping: {
         q: 'Bisa kirim ke luar kota?',
-        a: 'Belum bisa. Saat ini kami hanya mengakomodir wilayah Jakarta saja.',
+        a: 'Belum bisa. Saat ini kami hanya mengakomodir pengiriman untuk wilayah Jakarta dan sekitarnya menggunakan Paxel, GoSend, Grab, atau Maxim.',
       },
       hampers: {
         q: 'Bisa pesan custom hampers?',
@@ -137,6 +127,18 @@ export const id = {
         desc: 'Konfirmasi pembayaran, lalu kami proses dan kirim pesananmu.',
       },
     },
+  },
+  shipping: {
+    title: 'Pengiriman',
+    subtitle: 'Pilih layanan pengiriman yang paling nyaman untukmu.',
+    couriers: {
+      paxel: { desc: 'Pengiriman same-day untuk Jakarta dengan kemasan aman.' },
+      gosend: { desc: 'Layanan instant delivery dari Gojek.' },
+      grab: { desc: 'Pilihan delivery cepat dan terpercaya.' },
+      maxim: { desc: 'Ojek online dengan tarif kompetitif.' },
+    },
+    area: 'Tersedia untuk wilayah Jakarta dan sekitarnya.',
+    cost: 'Biaya pengiriman ditanggung oleh pembeli.',
   },
   cta: {
     title: 'Yuk, Jajan Uyu Snack Sekarang!',
@@ -171,20 +173,10 @@ export const id = {
     title: 'Tips & Resep',
     subtitle: 'Berbagai tips seputar camilan dan resep menarik dari Uyu Snack.',
     readMore: 'Baca Selengkapnya',
-    posts: {
-      storage: {
-        title: 'Cara Menyimpan Burnt Cheesecake Agar Tetap Lembut',
-        excerpt: 'Simpan dalam kulkas dan biarkan suhu ruang 10-15 menit sebelum disantap untuk tekstur terbaik.',
-      },
-      gift: {
-        title: 'Ide Hampers Simpel untuk Orang Tersayang',
-        excerpt: 'Kombinasi burnt cheesecake dengan kartu ucapan kecil bisa jadi hadiah yang berkesan.',
-      },
-      coffee: {
-        title: 'Paduan Terbaik Burnt Cheesecake dengan Minuman',
-        excerpt: 'Cobain dinikmati bersama kopi hitam atau teh tarik untuk pengalaman rasa yang lebih nikmat.',
-      },
-    },
+    loading: 'Memuat artikel...',
+    error: 'Gagal memuat artikel. Silakan coba lagi nanti.',
+    retry: 'Muat Ulang',
+    fallback: 'Menampilkan data lokal karena koneksi ke server terbatas.',
   },
   language: {
     id: 'ID',
@@ -273,20 +265,10 @@ export const en = {
   testimonials: {
     title: 'What Customers Say',
     subtitle: 'Reviews from friends who have tried Uyu Snack.',
-    items: {
-      dinda: {
-        text: 'The Burnt Cheesecake Original is so good, soft and not overwhelming. Already reordered 3 times!',
-        role: 'Loyal Customer',
-      },
-      rizky: {
-        text: 'The Chocobery sweetness is just right, strawberry and chocolate toppings are abundant. Family favorite!',
-        role: 'First-time Buyer',
-      },
-      siti: {
-        text: 'Ordered Chocolate Regal as a gift for a friend, delivered on time and the recipient was very happy.',
-        role: 'Hampers Buyer',
-      },
-    },
+    loading: 'Loading reviews...',
+    error: 'Failed to load reviews. Please try again later.',
+    retry: 'Reload',
+    fallback: 'Showing local data due to limited server connection.',
   },
   faq: {
     title: 'Frequently Asked Questions',
@@ -302,7 +284,7 @@ export const en = {
       },
       shipping: {
         q: 'Can you ship outside the city?',
-        a: 'Not yet. Currently we only serve the Jakarta area.',
+        a: 'Not yet. Currently we only serve delivery within Jakarta and surrounding areas using Paxel, GoSend, Grab, or Maxim.',
       },
       hampers: {
         q: 'Can I order custom hampers?',
@@ -331,6 +313,18 @@ export const en = {
         desc: 'Confirm payment, then we process and deliver your order.',
       },
     },
+  },
+  shipping: {
+    title: 'Shipping',
+    subtitle: 'Choose the most convenient delivery service for you.',
+    couriers: {
+      paxel: { desc: 'Same-day delivery for Jakarta with safe packaging.' },
+      gosend: { desc: 'Instant delivery service from Gojek.' },
+      grab: { desc: 'Fast and reliable delivery option.' },
+      maxim: { desc: 'Online ride-hailing with competitive rates.' },
+    },
+    area: 'Available for Jakarta and surrounding areas.',
+    cost: 'Shipping cost is borne by the buyer.',
   },
   cta: {
     title: 'Let\'s Order Uyu Snack Now!',
@@ -365,20 +359,10 @@ export const en = {
     title: 'Tips & Recipes',
     subtitle: 'Various tips about snacks and interesting recipes from Uyu Snack.',
     readMore: 'Read More',
-    posts: {
-      storage: {
-        title: 'How to Store Burnt Cheesecake to Keep It Soft',
-        excerpt: 'Store in the refrigerator and let it reach room temperature for 10-15 minutes before serving for the best texture.',
-      },
-      gift: {
-        title: 'Simple Hampers Ideas for Loved Ones',
-        excerpt: 'A combination of burnt cheesecake with a small greeting card can be a memorable gift.',
-      },
-      coffee: {
-        title: 'Best Drinks to Pair with Burnt Cheesecake',
-        excerpt: 'Try enjoying it with black coffee or tarik tea for a more delightful taste experience.',
-      },
-    },
+    loading: 'Loading articles...',
+    error: 'Failed to load articles. Please try again later.',
+    retry: 'Reload',
+    fallback: 'Showing local data due to limited server connection.',
   },
   language: {
     id: 'ID',

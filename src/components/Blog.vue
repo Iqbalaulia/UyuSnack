@@ -6,15 +6,23 @@
         <p class="section-subtitle">{{ t('blog.subtitle') }}</p>
       </SectionReveal>
 
+      <div v-if="loading" class="blog__status">{{ t('blog.loading') }}</div>
+      <div v-else-if="error && !usingFallback" class="blog__status blog__status--error">
+        {{ t('blog.error') }}
+        <button class="blog__retry" @click="fetchPosts">{{ t('blog.retry') }}</button>
+      </div>
+
+      <div v-if="usingFallback" class="blog__fallback">{{ t('blog.fallback') }}</div>
+
       <div class="blog__grid">
-        <SectionReveal v-for="(post, index) in posts" :key="post.key" :style="{ transitionDelay: `${index * 100}ms` }">
+        <SectionReveal v-for="(post, index) in posts" :key="post.id" :style="{ transitionDelay: `${index * 100}ms` }">
           <article class="blog-card">
             <div class="blog-card__image">
-              <LazyImage :src="post.image" :alt="t(`blog.posts.${post.key}.title`)" loading="lazy" />
+              <LazyImage :src="post.image" :alt="title(post)" loading="lazy" />
             </div>
             <div class="blog-card__body">
-              <h3 class="blog-card__title">{{ t(`blog.posts.${post.key}.title`) }}</h3>
-              <p class="blog-card__excerpt">{{ t(`blog.posts.${post.key}.excerpt`) }}</p>
+              <h3 class="blog-card__title">{{ title(post) }}</h3>
+              <p class="blog-card__excerpt">{{ excerpt(post) }}</p>
               <a href="#" class="blog-card__link" @click.prevent>
                 {{ t('blog.readMore') }}
               </a>
@@ -30,14 +38,13 @@
 import { useI18n } from 'vue-i18n'
 import SectionReveal from './SectionReveal.vue'
 import LazyImage from './LazyImage.vue'
+import { useBlogPosts } from '../composables/useBlogPosts'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const { posts, loading, error, usingFallback, fetchPosts } = useBlogPosts()
 
-const posts = [
-  { key: 'storage', image: '/assets/burnt-cheesecake-original.jpg' },
-  { key: 'gift', image: '/assets/burnt-cheesecake-chocobery.jpg' },
-  { key: 'coffee', image: '/assets/burnt-cheesecake-chocoregal.jpg' },
-]
+const title = (post) => (locale.value === 'en' ? post.title_en : post.title_id)
+const excerpt = (post) => (locale.value === 'en' ? post.excerpt_en : post.excerpt_id)
 </script>
 
 <style scoped>
@@ -49,6 +56,31 @@ const posts = [
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.25rem;
+}
+
+.blog__status {
+  text-align: center;
+  color: var(--color-text-light);
+  margin-bottom: 1rem;
+}
+
+.blog__status--error {
+  color: #dc2626;
+}
+
+.blog__retry {
+  display: inline-block;
+  margin-left: 0.5rem;
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.blog__fallback {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-bottom: 1rem;
 }
 
 .blog-card {
