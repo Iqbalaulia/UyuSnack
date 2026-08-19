@@ -65,6 +65,7 @@ import { useI18n } from 'vue-i18n'
 import { cart, removeFromCart, updateQty, clearCart, totalPrice } from '../stores/cart.ts'
 import { formatPrice, WHATSAPP_NUMBER } from '../data/products.ts'
 import { supabase } from '../lib/supabase.ts'
+import { track } from '../lib/track.ts'
 import CloseIcon from './icons/CloseIcon.vue'
 import CartIcon from './icons/CartIcon.vue'
 import TrashIcon from './icons/TrashIcon.vue'
@@ -97,6 +98,7 @@ const submitting = ref(false)
 
 const checkout = async () => {
   if (cart.items.length === 0) return
+  track('checkout_start')
   submitting.value = true
   try {
     await supabase.from('orders').insert({

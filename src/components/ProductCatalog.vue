@@ -87,9 +87,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { addToCart, cart } from '../stores/cart.ts'
+import { addToCart as addToCartStore, cart } from '../stores/cart.ts'
+import { track } from '../lib/track.ts'
+
+onMounted(() => track('view_menu'))
+
+const addToCart = (product) => {
+  track('add_to_cart')
+  addToCartStore(product)
+}
 import { useProducts } from '../composables/useProducts.ts'
 import CartIcon from './icons/CartIcon.vue'
 import SectionReveal from './SectionReveal.vue'

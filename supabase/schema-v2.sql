@@ -86,3 +86,24 @@ ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Authenticated manage expenses" ON expenses;
 CREATE POLICY "Authenticated manage expenses"
   ON expenses FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- ---------- Funnel Tracking (sampai step apa user berhenti) ----------
+-- step: 1=view_menu, 2=add_to_cart, 3=open_cart, 4=checkout_start, 5=order (order tersimpan di tabel orders)
+CREATE TABLE IF NOT EXISTS funnel_events (
+  id SERIAL PRIMARY KEY,
+  session_id TEXT NOT NULL,       -- id acak per pengunjung (localStorage)
+  step INTEGER NOT NULL,          -- nomor step, makin besar makin dalam funnel
+  step_name TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
+);
+CREATE INDEX IF NOT EXISTS funnel_events_created_idx ON funnel_events (created_at);
+
+ALTER TABLE funnel_events ENABLE ROW LEVEL SECURITY;
+-- Pengunjung anonim boleh mencatat event (insert saja), tidak boleh baca.
+DROP POLICY IF EXISTS "Anyone insert funnel" ON funnel_events;
+CREATE POLICY "Anyone insert funnel"
+  ON funnel_events FOR INSERT TO anon, authenticated WITH CHECK (true);
+-- Hanya admin (login) yang boleh membaca hasil tracking.
+DROP POLICY IF EXISTS "Authenticated read funnel" ON funnel_events;
+CREATE POLICY "Authenticated read funnel"
+  ON funnel_events FOR SELECT TO authenticated USING (true);

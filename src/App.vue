@@ -2,7 +2,7 @@
   <AdminView v-if="isAdmin" />
   <div v-else class="app" :class="{ 'has-announcement': !!activeBatch }">
     <AnnouncementBar :batch="activeBatch" :days-left="daysLeft" />
-    <Navbar @open-cart="isCartOpen = true" />
+    <Navbar @open-cart="openCart" />
     <main>
       <Hero />
       <About />
@@ -62,8 +62,13 @@ import WhatsAppFloat from './components/WhatsAppFloat.vue'
 import MobileStickyBar from './components/MobileStickyBar.vue'
 import CartDrawer from './components/CartDrawer.vue'
 import { useActiveBatch } from './composables/useActiveBatch.ts'
+import { track } from './lib/track.ts'
 
 const isCartOpen = ref(false)
+const openCart = () => {
+  track('open_cart')
+  isCartOpen.value = true
+}
 const { batch: activeBatch, daysLeft } = useActiveBatch()
 
 const isAdmin = ref(window.location.hash.startsWith('#/admin') || window.location.hash.startsWith('#admin'))
