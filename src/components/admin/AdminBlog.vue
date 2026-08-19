@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="b in posts" :key="b.id" :class="{ 'admin-row-inactive': !b.is_active }">
+          <tr v-for="b in paged" :key="b.id" :class="{ 'admin-row-inactive': !b.is_active }">
             <td>
               <div class="blog__name">
                 <img :src="b.image" :alt="b.title_id" class="admin-thumb" />
@@ -39,6 +39,7 @@
           </tr>
         </tbody>
       </table>
+      <AdminPagination v-model:page="page" :total-pages="totalPages" :total="total" />
     </div>
 
     <teleport to="body">
@@ -93,6 +94,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { supabase } from '../../lib/supabase'
+import { usePagination } from '../../composables/usePagination'
+import AdminPagination from './AdminPagination.vue'
 
 interface BlogPost {
   id: number; title_id: string; title_en: string; excerpt_id: string; excerpt_en: string
@@ -111,6 +114,7 @@ const emptyForm = () => ({
 })
 const form = ref(emptyForm())
 
+const { page, total, totalPages, paged } = usePagination(posts, 10)
 const showToast = (msg: string) => { toast.value = msg; setTimeout(() => (toast.value = ''), 2500) }
 
 const fetchPosts = async () => {

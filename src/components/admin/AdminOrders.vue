@@ -44,7 +44,7 @@
     <div v-else-if="filtered.length === 0" class="admin-card admin-empty">Belum ada order.</div>
 
     <div v-else style="display:flex; flex-direction:column; gap:1rem">
-      <article v-for="o in filtered" :key="o.id" class="admin-card order">
+      <article v-for="o in paged" :key="o.id" class="admin-card order">
         <div class="order__head">
           <div>
             <strong>#{{ o.id }} — {{ o.customer_name }}</strong>
@@ -85,6 +85,7 @@
 
         <div class="order__total">Total: <strong>{{ formatPrice(o.total_price) }}</strong></div>
       </article>
+      <AdminPagination v-model:page="page" :total-pages="totalPages" :total="total" />
     </div>
 
     <!-- Modal: order manual -->
@@ -156,6 +157,8 @@
 import { ref, computed, onMounted } from 'vue'
 import { supabase } from '../../lib/supabase'
 import { formatPrice } from '../../data/products'
+import { usePagination } from '../../composables/usePagination'
+import AdminPagination from './AdminPagination.vue'
 
 interface OrderItem { id: number; name: string; price: number; qty: number }
 interface Order {
@@ -201,6 +204,8 @@ const filtered = computed(() => {
   if (q) list = list.filter((o) => o.customer_name.toLowerCase().includes(q) || o.customer_phone.includes(q))
   return list
 })
+
+const { page, total, totalPages, paged } = usePagination(filtered, 8)
 
 const countBy = (s: string) => orders.value.filter((o) => o.status === s).length
 const revenue = computed(() =>

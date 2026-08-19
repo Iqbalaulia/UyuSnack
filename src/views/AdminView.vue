@@ -48,8 +48,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { supabase } from '../lib/supabase'
+import AdminDashboard from '../components/admin/AdminDashboard.vue'
 import AdminOrders from '../components/admin/AdminOrders.vue'
 import AdminProducts from '../components/admin/AdminProducts.vue'
+import AdminBatches from '../components/admin/AdminBatches.vue'
+import AdminMaterials from '../components/admin/AdminMaterials.vue'
+import AdminExpenses from '../components/admin/AdminExpenses.vue'
 import AdminBlog from '../components/admin/AdminBlog.vue'
 import AdminTestimonials from '../components/admin/AdminTestimonials.vue'
 
@@ -58,18 +62,26 @@ const email = ref('')
 const password = ref('')
 const loginError = ref('')
 const loading = ref(false)
-const tab = ref<'orders' | 'po' | 'blog' | 'testimonials'>('orders')
+const tab = ref<string>('dashboard')
 
 const menus = [
+  { id: 'dashboard', label: 'Dashboard Laba', icon: '📊' },
   { id: 'orders', label: 'Orders', icon: '🧾' },
   { id: 'po', label: 'Open PO & Produk', icon: '📦' },
+  { id: 'batches', label: 'Batch PO', icon: '🗓️' },
+  { id: 'materials', label: 'Bahan Baku', icon: '🧪' },
+  { id: 'expenses', label: 'Pengeluaran', icon: '💸' },
   { id: 'blog', label: 'Blog', icon: '📝' },
   { id: 'testimonials', label: 'Testimoni', icon: '💬' },
 ] as const
 
-const panels = {
+const panels: Record<string, any> = {
+  dashboard: AdminDashboard,
   orders: AdminOrders,
   po: AdminProducts,
+  batches: AdminBatches,
+  materials: AdminMaterials,
+  expenses: AdminExpenses,
   blog: AdminBlog,
   testimonials: AdminTestimonials,
 }

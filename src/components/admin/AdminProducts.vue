@@ -37,15 +37,16 @@
         <thead>
           <tr>
             <th>Produk</th>
-            <th>Kategori</th>
             <th>Harga</th>
+            <th>HPP</th>
+            <th>Margin</th>
             <th>Status</th>
             <th>Tampil</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="p in products" :key="p.id" :class="{ 'admin-row-inactive': !p.is_active }">
+          <tr v-for="p in paged" :key="p.id" :class="{ 'admin-row-inactive': !p.is_active }">
             <td>
               <div class="po__name">
                 <img :src="p.image" :alt="p.name" class="admin-thumb" />
@@ -55,8 +56,12 @@
                 </div>
               </div>
             </td>
-            <td>{{ CATEGORY_LABELS[p.category] || p.category }}</td>
             <td>{{ formatPrice(p.price) }}</td>
+            <td>{{ formatPrice(p.hpp) }}</td>
+            <td :style="{ color: p.price - p.hpp >= 0 ? '#047857' : '#b91c1c', fontWeight: 700 }">
+              {{ formatPrice(p.price - p.hpp) }}
+              <div class="admin-muted" v-if="p.price">{{ Math.round(((p.price - p.hpp) / p.price) * 100) }}%</div>
+            </td>
             <td>
               <select class="admin-input po__stock" :value="p.stock" @change="quickUpdate(p.id, { stock: ($event.target as HTMLSelectElement).value })">
                 <option value="available">Tersedia</option>
@@ -68,12 +73,14 @@
               <input type="checkbox" :checked="p.is_active" @change="quickUpdate(p.id, { is_active: ($event.target as HTMLInputElement).checked })" />
             </td>
             <td style="white-space:nowrap">
+              <button class="admin-btn admin-btn--sm" @click="openRecipe(p)">Resep</button>
               <button class="admin-btn admin-btn--sm" @click="openForm(p)">Edit</button>
               <button class="admin-btn admin-btn--danger admin-btn--sm" @click="remove(p)">Hapus</button>
             </td>
           </tr>
         </tbody>
       </table>
+      <AdminPagination v-model:page="page" :total-pages="totalPages" :total="total" />
     </div>
 
     <!-- Modal: create/edit produk -->
@@ -137,21 +144,60 @@
       </div>
     </teleport>
 
+    <!-- Modal: resep / HPP -->
+    <teleport to="body">
+      <div v-if="showRecipe" class="admin-modal-overlay" @click.self="showRecipe = false">
+        <div class="admin-modal">
+          <h3 class="admin-modal__title">Resep & HPP — {{ recipeProduct?.name }}</h3>
+          <p v-if="materials.length === 0" class="admin-muted" style="margin-bottom:.75rem">
+            Belum ada bahan baku. Tambahkan dulu di menu "Bahan Baku".
+          </p>
+          <div class="admin-form">
+            <div v-for="(r, i) in recipeRows" :key="i" class="recipe__row">
+              <select v-model.number="r.material_id" class="admin-input">
+                <option :value="null" disabled>Pilih bahan...</option>
+                <option v-for="m in materials" :key="m.id" :value="m.id">
+                  {{ m.name }} ({{ formatPrice(m.price_per_unit) }}/{{ m.unit }})
+                </option>
+              </select>
+              <input v-model.number="r.quantity" type="number" min="0" step="any" class="admin-input recipe__qty" placeholder="Qty" />
+              <span class="recipe__sub">{{ formatPrice((matById(r.material_id)?.price_per_unit || 0) * (r.quantity || 0)) }}</span>
+              <button type="button" class="admin-btn admin-btn--danger admin-btn--sm" @click="recipeRows.splice(i, 1)">×</button>
+            </div>
+            <button type="button" class="admin-btn admin-btn--sm" @click="addRecipeRow">+ Tambah bahan</button>
+
+            <div class="recipe__total">
+              <span>HPP per produk:</span>
+              <strong>{{ formatPrice(Math.round(recipeHpp)) }}</strong>
+            </div>
+            <div class="admin-form__actions">
+              <button type="button" class="admin-btn" @click="showRecipe = false">Batal</button>
+              <button class="admin-btn admin-btn--primary" :disabled="savingRecipe" @click="saveRecipe">
+                {{ savingRecipe ? 'Menyimpan...' : 'Simpan Resep' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </teleport>
+
     <div v-if="toast" class="admin-toast">{{ toast }}</div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { supabase } from '../../lib/supabase'
 import { formatPrice } from '../../data/products'
+import { usePagination } from '../../composables/usePagination'
+import AdminPagination from './AdminPagination.vue'
 
 interface Product {
   id: number; name: string; category: string; price: number; description: string
-  image: string; badge: string | null; stock: string; is_active: boolean
+  image: string; badge: string | null; stock: string; is_active: boolean; hpp: number
 }
-
-const CATEGORY_LABELS: Record<string, string> = { 'best-seller': 'Best Seller', new: 'New Variant' }
+interface Material { id: number; name: string; unit: string; price_per_unit: number }
+interface RecipeRow { material_id: number | null; quantity: number }
 
 const products = ref<Product[]>([])
 const loading = ref(false)
@@ -161,9 +207,11 @@ const toast = ref('')
 const emptyForm = () => ({
   id: null as number | null,
   name: '', category: 'new', price: 0, description: '',
-  image: '', badge: '', stock: 'preorder', is_active: true,
+  image: '', badge: '', stock: 'preorder', is_active: true, hpp: 0,
 })
 const form = ref(emptyForm())
+
+const { page, total, totalPages, paged } = usePagination(products, 8)
 
 const showToast = (msg: string) => { toast.value = msg; setTimeout(() => (toast.value = ''), 2500) }
 const countStock = (s: string) => products.value.filter((p) => p.stock === s && p.is_active).length
@@ -190,7 +238,7 @@ const openForm = (p?: Product) => {
 
 const save = async () => {
   saving.value = true
-  const { id, ...payload } = form.value
+  const { id, hpp, ...payload } = form.value
   const body = { ...payload, badge: payload.badge || null }
   const { error } = id
     ? await supabase.from('products').update(body).eq('id', id)
@@ -211,6 +259,58 @@ const remove = async (p: Product) => {
   showToast('Produk dihapus ✓')
 }
 
+// ---------- Resep / HPP ----------
+const showRecipe = ref(false)
+const recipeProduct = ref<Product | null>(null)
+const materials = ref<Material[]>([])
+const recipeRows = ref<RecipeRow[]>([])
+const savingRecipe = ref(false)
+
+const matById = (id: number | null) => materials.value.find((m) => m.id === id)
+const recipeHpp = computed(() =>
+  recipeRows.value.reduce((sum, r) => {
+    const m = matById(r.material_id)
+    return sum + (m ? m.price_per_unit * (r.quantity || 0) : 0)
+  }, 0)
+)
+
+const openRecipe = async (p: Product) => {
+  recipeProduct.value = p
+  showRecipe.value = true
+  recipeRows.value = []
+  if (materials.value.length === 0) {
+    const { data } = await supabase.from('materials').select('*').eq('is_active', true).order('name')
+    materials.value = (data || []) as Material[]
+  }
+  const { data } = await supabase.from('product_materials').select('material_id, quantity').eq('product_id', p.id)
+  recipeRows.value = (data || []).map((r: any) => ({ material_id: r.material_id, quantity: Number(r.quantity) }))
+  if (recipeRows.value.length === 0) recipeRows.value.push({ material_id: null, quantity: 0 })
+}
+
+const addRecipeRow = () => recipeRows.value.push({ material_id: null, quantity: 0 })
+
+const saveRecipe = async () => {
+  const p = recipeProduct.value
+  if (!p) return
+  savingRecipe.value = true
+  const rows = recipeRows.value.filter((r) => r.material_id && r.quantity > 0)
+  const hpp = Math.round(recipeHpp.value)
+
+  await supabase.from('product_materials').delete().eq('product_id', p.id)
+  if (rows.length) {
+    const { error } = await supabase.from('product_materials').insert(
+      rows.map((r) => ({ product_id: p.id, material_id: r.material_id, quantity: r.quantity }))
+    )
+    if (error) { savingRecipe.value = false; return showToast('Gagal: ' + error.message) }
+  }
+  await supabase.from('products').update({ hpp }).eq('id', p.id)
+  const local = products.value.find((x) => x.id === p.id)
+  if (local) local.hpp = hpp
+  savingRecipe.value = false
+  showRecipe.value = false
+  showToast('Resep & HPP tersimpan ✓')
+}
+
 onMounted(fetchProducts)
 </script>
 
@@ -226,5 +326,33 @@ onMounted(fetchProducts)
   font-weight: 700;
   font-size: 0.85rem;
   padding: 0.45rem 0.6rem;
+}
+.recipe__row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.recipe__qty {
+  width: 90px;
+  flex-shrink: 0;
+}
+.recipe__sub {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  min-width: 80px;
+  text-align: right;
+}
+.recipe__total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--color-secondary);
+  border-radius: 8px;
+  font-size: 1.05rem;
+}
+.recipe__total strong {
+  color: var(--color-primary-dark);
+  font-size: 1.25rem;
 }
 </style>

@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="t in items" :key="t.id" :class="{ 'admin-row-inactive': !t.is_active }">
+          <tr v-for="t in paged" :key="t.id" :class="{ 'admin-row-inactive': !t.is_active }">
             <td>
               <div class="tm__name">
                 <img :src="t.avatar" :alt="t.name" class="admin-thumb" />
@@ -41,6 +41,7 @@
           </tr>
         </tbody>
       </table>
+      <AdminPagination v-model:page="page" :total-pages="totalPages" :total="total" />
     </div>
 
     <teleport to="body">
@@ -100,6 +101,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { supabase } from '../../lib/supabase'
+import { usePagination } from '../../composables/usePagination'
+import AdminPagination from './AdminPagination.vue'
 
 interface Testimonial {
   id: number; name: string; role_id: string; role_en: string
@@ -118,6 +121,7 @@ const emptyForm = () => ({
 })
 const form = ref(emptyForm())
 
+const { page, total, totalPages, paged } = usePagination(items, 10)
 const showToast = (msg: string) => { toast.value = msg; setTimeout(() => (toast.value = ''), 2500) }
 
 const fetchItems = async () => {
