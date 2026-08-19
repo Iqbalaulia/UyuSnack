@@ -1,6 +1,7 @@
 <template>
   <AdminView v-if="isAdmin" />
-  <div v-else class="app">
+  <div v-else class="app" :class="{ 'has-announcement': !!activeBatch }">
+    <AnnouncementBar :batch="activeBatch" :days-left="daysLeft" />
     <Navbar @open-cart="isCartOpen = true" />
     <main>
       <Hero />
@@ -22,10 +23,29 @@
   </div>
 </template>
 
+<style>
+/* Saat announcement bar tampil: geser navbar & konten ke bawah setinggi bar. */
+:root {
+  --ann-height: 2.75rem;
+}
+.has-announcement .header {
+  top: var(--ann-height);
+}
+.has-announcement main {
+  padding-top: var(--ann-height);
+}
+@media (max-width: 600px) {
+  :root {
+    --ann-height: 3.75rem;
+  }
+}
+</style>
+
 <script setup>
 import { ref, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 const AdminView = defineAsyncComponent(() => import('./views/AdminView.vue'))
 import Navbar from './components/Navbar.vue'
+import AnnouncementBar from './components/AnnouncementBar.vue'
 import Hero from './components/Hero.vue'
 import About from './components/About.vue'
 import Features from './components/Features.vue'
@@ -41,8 +61,10 @@ import Footer from './components/Footer.vue'
 import WhatsAppFloat from './components/WhatsAppFloat.vue'
 import MobileStickyBar from './components/MobileStickyBar.vue'
 import CartDrawer from './components/CartDrawer.vue'
+import { useActiveBatch } from './composables/useActiveBatch.ts'
 
 const isCartOpen = ref(false)
+const { batch: activeBatch, daysLeft } = useActiveBatch()
 
 const isAdmin = ref(window.location.hash.startsWith('#/admin') || window.location.hash.startsWith('#admin'))
 const onHashChange = () => {

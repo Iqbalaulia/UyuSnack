@@ -8,6 +8,12 @@ export const id = {
     instagram: 'Instagram',
     cart: 'Keranjang',
   },
+  announcement: {
+    open: 'Open PO sedang berlangsung',
+    closesToday: 'Tutup hari ini!',
+    closesIn: 'Tutup dalam {n} hari',
+    order: 'Pesan Sekarang',
+  },
   hero: {
     tag: 'Homemade & Halal',
     title: 'Camilan Lezat untuk Setiap Momen Bahagia',
@@ -195,6 +201,12 @@ export const en = {
     faq: 'FAQ',
     instagram: 'Instagram',
     cart: 'Cart',
+  },
+  announcement: {
+    open: 'Pre-Order is now open',
+    closesToday: 'Closes today!',
+    closesIn: 'Closes in {n} days',
+    order: 'Order Now',
   },
   hero: {
     tag: 'Homemade & Halal',
