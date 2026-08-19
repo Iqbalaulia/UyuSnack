@@ -94,8 +94,16 @@ CREATE TABLE IF NOT EXISTS funnel_events (
   session_id TEXT NOT NULL,       -- id acak per pengunjung (localStorage)
   step INTEGER NOT NULL,          -- nomor step, makin besar makin dalam funnel
   step_name TEXT NOT NULL,
+  device TEXT,                    -- 'mobile' / 'desktop' (dari userAgent)
+  city TEXT,                      -- perkiraan kota (dari IP via ipapi.co)
+  region TEXT,                    -- perkiraan provinsi/wilayah
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
+
+-- Jika tabel sudah dibuat sebelumnya tanpa kolom ini:
+ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS device TEXT;
+ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS city TEXT;
+ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS region TEXT;
 CREATE INDEX IF NOT EXISTS funnel_events_created_idx ON funnel_events (created_at);
 
 ALTER TABLE funnel_events ENABLE ROW LEVEL SECURITY;

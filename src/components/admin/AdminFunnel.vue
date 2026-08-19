@@ -42,6 +42,39 @@
             — {{ topDrop.drop }} orang ({{ pct(topDrop.drop) }}%) tidak lanjut dari titik ini.
           </p>
         </div>
+
+        <div class="fn__grid">
+          <div class="admin-card">
+            <h3 style="margin-bottom:.75rem">Perangkat</h3>
+            <table class="admin-table">
+              <thead><tr><th>Device</th><th>Sesi</th><th>%</th></tr></thead>
+              <tbody>
+                <tr v-for="d in byDevice" :key="d.label">
+                  <td style="text-transform:capitalize">{{ d.label }}</td>
+                  <td>{{ d.count }}</td>
+                  <td>{{ pct(d.count) }}%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="admin-card">
+            <h3 style="margin-bottom:.75rem">Lokasi (perkiraan)</h3>
+            <table class="admin-table">
+              <thead><tr><th>Daerah</th><th>Sesi</th><th>%</th></tr></thead>
+              <tbody>
+                <tr v-for="l in byLocation" :key="l.label">
+                  <td>{{ l.label }}</td>
+                  <td>{{ l.count }}</td>
+                  <td>{{ pct(l.count) }}%</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="admin-muted" style="margin:.75rem 0 0;font-size:.78rem">
+              Perkiraan dari IP (level kota) — bisa meleset di jaringan seluler/VPN.
+            </p>
+          </div>
+        </div>
       </template>
     </template>
   </section>
@@ -75,6 +108,10 @@ const to = ref('')
 const reached = ref<Record<number, number>>({})
 const totalSessions = computed(() => reached.value[1] || 0)
 
+// Breakdown per sesi unik: device & lokasi.
+const byDevice = ref<{ label: string; count: number }[]>([])
+const byLocation = ref<{ label: string; count: number }[]>([])
+
 const funnel = computed(() =>
   STEPS.map((s, i) => {
     const count = reached.value[s.step] || 0
@@ -103,7 +140,7 @@ const load = async () => {
   loading.value = true
 
   // Step furthest per sesi dari funnel_events.
-  let eq = supabase.from('funnel_events').select('session_id, step, created_at')
+  let eq = supabase.from('funnel_events').select('session_id, step, device, city, region, created_at')
   if (from.value) eq = eq.gte('created_at', from.value)
   if (to.value) eq = eq.lte('created_at', to.value + 'T23:59:59')
   const { data: events } = await eq
@@ -115,12 +152,28 @@ const load = async () => {
   if (to.value) oq = oq.lte('created_at', to.value + 'T23:59:59')
   const { data: orders } = await oq
 
-  // Untuk tiap sesi, catat step tertinggi yang dicapai.
+  // Untuk tiap sesi, catat step tertinggi + device/lokasi (ambil nilai pertama non-null).
   const maxStep = new Map<string, number>()
+  const devOf = new Map<string, string>()
+  const locOf = new Map<string, string>()
   ;(events || []).forEach((e: any) => {
     const cur = maxStep.get(e.session_id) || 0
     if (e.step > cur) maxStep.set(e.session_id, e.step)
+    if (e.device && !devOf.has(e.session_id)) devOf.set(e.session_id, e.device)
+    const loc = e.city || e.region
+    if (loc && !locOf.has(e.session_id)) locOf.set(e.session_id, e.region ? `${e.city || '?'}, ${e.region}` : loc)
   })
+
+  const tally = (m: Map<string, string>, fallback: string) => {
+    const c = new Map<string, number>()
+    maxStep.forEach((_s, sid) => {
+      const key = m.get(sid) || fallback
+      c.set(key, (c.get(key) || 0) + 1)
+    })
+    return [...c.entries()].map(([label, count]) => ({ label, count })).sort((a, b) => b.count - a.count)
+  }
+  byDevice.value = tally(devOf, 'tidak diketahui')
+  byLocation.value = tally(locOf, 'tidak diketahui')
 
   // reached[k] = jumlah sesi dengan maxStep >= k (funnel kumulatif).
   const r: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
@@ -179,5 +232,11 @@ onMounted(() => applyPreset('last30'))
   margin-top: 0.5rem;
   font-size: 0.82rem;
   color: #b45309;
+}
+.fn__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.25rem;
 }
 </style>
