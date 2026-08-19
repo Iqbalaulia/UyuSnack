@@ -95,7 +95,7 @@ import { track } from '../lib/track.ts'
 onMounted(() => track('view_menu'))
 
 const addToCart = (product) => {
-  track('add_to_cart')
+  track('add_to_cart', { productName: product.name })
   addToCartStore(product)
 }
 import { useProducts } from '../composables/useProducts.ts'

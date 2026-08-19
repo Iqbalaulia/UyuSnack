@@ -98,7 +98,7 @@ const submitting = ref(false)
 
 const checkout = async () => {
   if (cart.items.length === 0) return
-  track('checkout_start')
+  track('checkout_start', { cartValue: totalPrice.value })
   submitting.value = true
   try {
     await supabase.from('orders').insert({

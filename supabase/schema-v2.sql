@@ -97,6 +97,10 @@ CREATE TABLE IF NOT EXISTS funnel_events (
   device TEXT,                    -- 'mobile' / 'desktop' (dari userAgent)
   city TEXT,                      -- perkiraan kota (dari IP via ipapi.co)
   region TEXT,                    -- perkiraan provinsi/wilayah
+  product_name TEXT,              -- produk terkait (untuk step add_to_cart)
+  cart_value INTEGER,             -- total keranjang (untuk step checkout_start)
+  utm_source TEXT,                -- sumber trafik (?utm_source=...)
+  referrer TEXT,                  -- domain asal (document.referrer)
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
 
@@ -104,6 +108,10 @@ CREATE TABLE IF NOT EXISTS funnel_events (
 ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS device TEXT;
 ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS city TEXT;
 ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS region TEXT;
+ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS product_name TEXT;
+ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS cart_value INTEGER;
+ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS utm_source TEXT;
+ALTER TABLE funnel_events ADD COLUMN IF NOT EXISTS referrer TEXT;
 CREATE INDEX IF NOT EXISTS funnel_events_created_idx ON funnel_events (created_at);
 
 ALTER TABLE funnel_events ENABLE ROW LEVEL SECURITY;
