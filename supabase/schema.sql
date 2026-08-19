@@ -111,6 +111,15 @@ CREATE POLICY "Public can insert orders"
   TO anon
   WITH CHECK (true);
 
+-- Policy: admin (authenticated) bisa update & hapus orders
+DROP POLICY IF EXISTS "Authenticated users can manage orders" ON orders;
+CREATE POLICY "Authenticated users can manage orders"
+  ON orders
+  FOR ALL
+  TO authenticated
+  USING (true)
+  WITH CHECK (true);
+
 CREATE TRIGGER update_orders_updated_at
   BEFORE UPDATE ON orders
   FOR EACH ROW

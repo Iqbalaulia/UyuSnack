@@ -1,5 +1,6 @@
 <template>
-  <div class="app">
+  <AdminView v-if="isAdmin" />
+  <div v-else class="app">
     <Navbar @open-cart="isCartOpen = true" />
     <main>
       <Hero />
@@ -22,7 +23,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import AdminView from './views/AdminView.vue'
 import Navbar from './components/Navbar.vue'
 import Hero from './components/Hero.vue'
 import About from './components/About.vue'
@@ -41,4 +43,11 @@ import MobileStickyBar from './components/MobileStickyBar.vue'
 import CartDrawer from './components/CartDrawer.vue'
 
 const isCartOpen = ref(false)
+
+const isAdmin = ref(window.location.hash.startsWith('#/admin') || window.location.hash.startsWith('#admin'))
+const onHashChange = () => {
+  isAdmin.value = window.location.hash.startsWith('#/admin') || window.location.hash.startsWith('#admin')
+}
+onMounted(() => window.addEventListener('hashchange', onHashChange))
+onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
 </script>

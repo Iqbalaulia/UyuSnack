@@ -163,6 +163,8 @@ export const id = {
     clear: 'Kosongkan Keranjang',
     orderMessage: 'Halo Uyu Snack, saya mau pesan:',
     availability: 'Apakah bisa diproses?',
+    namePlaceholder: 'Nama kamu',
+    phonePlaceholder: 'Nomor WhatsApp (08xx)',
   },
   instagram: {
     title: 'Ikuti Kami di Instagram',
@@ -349,6 +351,8 @@ export const en = {
     clear: 'Clear Cart',
     orderMessage: 'Hello Uyu Snack, I would like to order:',
     availability: 'Can this be processed?',
+    namePlaceholder: 'Your name',
+    phonePlaceholder: 'WhatsApp number (08xx)',
   },
   instagram: {
     title: 'Follow Us on Instagram',

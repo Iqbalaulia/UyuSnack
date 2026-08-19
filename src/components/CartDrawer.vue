@@ -42,15 +42,15 @@
               <span>{{ t('cart.total') }}</span>
               <strong>{{ formatPrice(totalPrice) }}</strong>
             </div>
-            <a
-              :href="orderLink"
-              target="_blank"
-              rel="noopener noreferrer"
+            <input v-model="customerName" type="text" class="cart-drawer__input" :placeholder="t('cart.namePlaceholder')" />
+            <input v-model="customerPhone" type="tel" class="cart-drawer__input" :placeholder="t('cart.phonePlaceholder')" />
+            <button
               class="btn btn-primary cart-drawer__checkout"
-              @click="close"
+              :disabled="submitting"
+              @click="checkout"
             >
-              {{ t('cart.checkout') }}
-            </a>
+              {{ submitting ? '...' : t('cart.checkout') }}
+            </button>
             <button class="cart-drawer__clear" @click="clearCart">{{ t('cart.clear') }}</button>
           </div>
         </div>
@@ -60,10 +60,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { cart, removeFromCart, updateQty, clearCart, totalPrice } from '../stores/cart.ts'
 import { formatPrice, WHATSAPP_NUMBER } from '../data/products.ts'
+import { supabase } from '../lib/supabase.ts'
 import CloseIcon from './icons/CloseIcon.vue'
 import CartIcon from './icons/CartIcon.vue'
 import TrashIcon from './icons/TrashIcon.vue'
@@ -89,6 +90,29 @@ const getWhatsAppOrderMessage = () => {
 const orderLink = computed(() => {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(getWhatsAppOrderMessage())}`
 })
+
+const customerName = ref('')
+const customerPhone = ref('')
+const submitting = ref(false)
+
+const checkout = async () => {
+  if (cart.items.length === 0) return
+  submitting.value = true
+  try {
+    await supabase.from('orders').insert({
+      customer_name: customerName.value || 'WhatsApp Customer',
+      customer_phone: customerPhone.value || '-',
+      items: cart.items.map((i) => ({ id: i.id, name: i.name, price: i.price, qty: i.qty })),
+      total_price: totalPrice.value,
+    })
+  } catch (err) {
+    console.warn('Gagal simpan order:', err)
+  } finally {
+    submitting.value = false
+    window.open(orderLink.value, '_blank', 'noopener')
+    close()
+  }
+}
 </script>
 
 <style scoped>
@@ -248,9 +272,23 @@ const orderLink = computed(() => {
   font-size: 1.25rem;
 }
 
+.cart-drawer__input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font: inherit;
+}
+
 .cart-drawer__checkout {
   width: 100%;
   margin-bottom: 0.75rem;
+}
+
+.cart-drawer__checkout:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .cart-drawer__clear {
