@@ -23,8 +23,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import AdminView from './views/AdminView.vue'
+import { ref, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
+const AdminView = defineAsyncComponent(() => import('./views/AdminView.vue'))
 import Navbar from './components/Navbar.vue'
 import Hero from './components/Hero.vue'
 import About from './components/About.vue'
