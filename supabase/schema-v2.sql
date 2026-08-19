@@ -33,8 +33,12 @@ CREATE TABLE IF NOT EXISTS product_materials (
   id SERIAL PRIMARY KEY,
   product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   material_id INTEGER NOT NULL REFERENCES materials(id) ON DELETE CASCADE,
-  quantity NUMERIC NOT NULL DEFAULT 0          -- jumlah unit bahan per 1 produk
+  quantity NUMERIC NOT NULL DEFAULT 0,         -- jumlah unit bahan yang dipakai
+  yield NUMERIC NOT NULL DEFAULT 1             -- 1 pakaian bahan ini menghasilkan berapa produk
 );
+
+-- Bila tabel sudah pernah dibuat tanpa kolom yield:
+ALTER TABLE product_materials ADD COLUMN IF NOT EXISTS yield NUMERIC NOT NULL DEFAULT 1;
 
 ALTER TABLE product_materials ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Authenticated manage product_materials" ON product_materials;

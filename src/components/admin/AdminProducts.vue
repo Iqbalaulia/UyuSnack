@@ -152,7 +152,17 @@
           <p v-if="materials.length === 0" class="admin-muted" style="margin-bottom:.75rem">
             Belum ada bahan baku. Tambahkan dulu di menu "Bahan Baku".
           </p>
+          <p class="admin-muted" style="margin-bottom:.5rem">
+            <strong>Hasil (yield)</strong> = 1 pakaian bahan ini jadi berapa produk. Contoh: adonan untuk 2 cheesecake → isi <strong>2</strong>. Topping/packing untuk 1 → isi <strong>1</strong>.
+          </p>
           <div class="admin-form">
+            <div class="recipe__row recipe__head">
+              <span>Bahan</span>
+              <span>Qty</span>
+              <span>Hasil</span>
+              <span style="text-align:right">HPP/produk</span>
+              <span></span>
+            </div>
             <div v-for="(r, i) in recipeRows" :key="i" class="recipe__row">
               <select v-model.number="r.material_id" class="admin-input">
                 <option :value="null" disabled>Pilih bahan...</option>
@@ -161,7 +171,8 @@
                 </option>
               </select>
               <input v-model.number="r.quantity" type="number" min="0" step="any" class="admin-input recipe__qty" placeholder="Qty" />
-              <span class="recipe__sub">{{ formatPrice((matById(r.material_id)?.price_per_unit || 0) * (r.quantity || 0)) }}</span>
+              <input v-model.number="r.yield" type="number" min="1" step="any" class="admin-input recipe__qty" placeholder="Hasil" />
+              <span class="recipe__sub">{{ formatPrice(rowHpp(r)) }}</span>
               <button type="button" class="admin-btn admin-btn--danger admin-btn--sm" @click="recipeRows.splice(i, 1)">×</button>
             </div>
             <button type="button" class="admin-btn admin-btn--sm" @click="addRecipeRow">+ Tambah bahan</button>
@@ -197,7 +208,7 @@ interface Product {
   image: string; badge: string | null; stock: string; is_active: boolean; hpp: number
 }
 interface Material { id: number; name: string; unit: string; price_per_unit: number }
-interface RecipeRow { material_id: number | null; quantity: number }
+interface RecipeRow { material_id: number | null; quantity: number; yield: number }
 
 const products = ref<Product[]>([])
 const loading = ref(false)
@@ -267,12 +278,13 @@ const recipeRows = ref<RecipeRow[]>([])
 const savingRecipe = ref(false)
 
 const matById = (id: number | null) => materials.value.find((m) => m.id === id)
-const recipeHpp = computed(() =>
-  recipeRows.value.reduce((sum, r) => {
-    const m = matById(r.material_id)
-    return sum + (m ? m.price_per_unit * (r.quantity || 0) : 0)
-  }, 0)
-)
+// HPP per produk untuk 1 baris = (harga bahan × qty) ÷ yield (berapa produk dihasilkan dari pakaian bahan ini)
+const rowHpp = (r: RecipeRow) => {
+  const m = matById(r.material_id)
+  if (!m) return 0
+  return (m.price_per_unit * (r.quantity || 0)) / (r.yield && r.yield > 0 ? r.yield : 1)
+}
+const recipeHpp = computed(() => recipeRows.value.reduce((sum, r) => sum + rowHpp(r), 0))
 
 const openRecipe = async (p: Product) => {
   recipeProduct.value = p
@@ -282,12 +294,12 @@ const openRecipe = async (p: Product) => {
     const { data } = await supabase.from('materials').select('*').eq('is_active', true).order('name')
     materials.value = (data || []) as Material[]
   }
-  const { data } = await supabase.from('product_materials').select('material_id, quantity').eq('product_id', p.id)
-  recipeRows.value = (data || []).map((r: any) => ({ material_id: r.material_id, quantity: Number(r.quantity) }))
-  if (recipeRows.value.length === 0) recipeRows.value.push({ material_id: null, quantity: 0 })
+  const { data } = await supabase.from('product_materials').select('material_id, quantity, yield').eq('product_id', p.id)
+  recipeRows.value = (data || []).map((r: any) => ({ material_id: r.material_id, quantity: Number(r.quantity), yield: Number(r.yield) || 1 }))
+  if (recipeRows.value.length === 0) recipeRows.value.push({ material_id: null, quantity: 0, yield: 1 })
 }
 
-const addRecipeRow = () => recipeRows.value.push({ material_id: null, quantity: 0 })
+const addRecipeRow = () => recipeRows.value.push({ material_id: null, quantity: 0, yield: 1 })
 
 const saveRecipe = async () => {
   const p = recipeProduct.value
@@ -299,7 +311,7 @@ const saveRecipe = async () => {
   await supabase.from('product_materials').delete().eq('product_id', p.id)
   if (rows.length) {
     const { error } = await supabase.from('product_materials').insert(
-      rows.map((r) => ({ product_id: p.id, material_id: r.material_id, quantity: r.quantity }))
+      rows.map((r) => ({ product_id: p.id, material_id: r.material_id, quantity: r.quantity, yield: r.yield && r.yield > 0 ? r.yield : 1 }))
     )
     if (error) { savingRecipe.value = false; return showToast('Gagal: ' + error.message) }
   }
@@ -328,18 +340,25 @@ onMounted(fetchProducts)
   padding: 0.45rem 0.6rem;
 }
 .recipe__row {
-  display: flex;
-  gap: 0.5rem;
+  display: grid;
+  grid-template-columns: 1fr 72px 72px 90px 32px;
+  gap: 0.4rem;
   align-items: center;
 }
+.recipe__head {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-light);
+  font-weight: 700;
+}
 .recipe__qty {
-  width: 90px;
-  flex-shrink: 0;
+  width: 100%;
+  padding: 0.5rem 0.45rem;
 }
 .recipe__sub {
   font-size: 0.8rem;
   color: var(--color-text-light);
-  min-width: 80px;
   text-align: right;
 }
 .recipe__total {
