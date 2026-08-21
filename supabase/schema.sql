@@ -128,16 +128,31 @@ CREATE TRIGGER update_orders_updated_at
 -- Tabel blog_posts (Tips & Resep)
 CREATE TABLE IF NOT EXISTS blog_posts (
   id SERIAL PRIMARY KEY,
+  slug TEXT NOT NULL UNIQUE,
   title_id TEXT NOT NULL,
   title_en TEXT NOT NULL,
   excerpt_id TEXT NOT NULL,
   excerpt_en TEXT NOT NULL,
+  content_id TEXT NOT NULL DEFAULT '',
+  content_en TEXT NOT NULL DEFAULT '',
   image TEXT NOT NULL,
+  published_at DATE NOT NULL DEFAULT CURRENT_DATE,
+  read_time_minutes INTEGER NOT NULL DEFAULT 1,
   is_active BOOLEAN NOT NULL DEFAULT true,
   sort_order INTEGER NOT NULL DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
+
+-- Bila tabel sudah dibuat sebelumnya tanpa kolom baru:
+ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS slug TEXT UNIQUE;
+ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS content_id TEXT NOT NULL DEFAULT '';
+ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS content_en TEXT NOT NULL DEFAULT '';
+ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS published_at DATE NOT NULL DEFAULT CURRENT_DATE;
+ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS read_time_minutes INTEGER NOT NULL DEFAULT 1;
+
+-- Isi slug kosong bila data lama belum punya slug
+UPDATE blog_posts SET slug = LOWER(REGEXP_REPLACE(REGEXP_REPLACE(title_id, '[^a-zA-Z0-9]+', '-', 'g'), '^-|-$', '', 'g')) WHERE slug IS NULL OR slug = '';
 
 ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
 
@@ -158,32 +173,47 @@ CREATE TRIGGER update_blog_posts_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
-INSERT INTO blog_posts (title_id, title_en, excerpt_id, excerpt_en, image, is_active, sort_order)
+INSERT INTO blog_posts (slug, title_id, title_en, excerpt_id, excerpt_en, content_id, content_en, image, published_at, read_time_minutes, is_active, sort_order)
 VALUES
   (
+    'cara-menyimpan-burnt-cheesecake',
     'Cara Menyimpan Burnt Cheesecake Agar Tetap Lembut',
     'How to Store Burnt Cheesecake to Keep It Soft',
     'Simpan dalam kulkas dan biarkan suhu ruang 10-15 menit sebelum disantap untuk tekstur terbaik.',
     'Store in the refrigerator and let it reach room temperature for 10-15 minutes before serving for the best texture.',
+    '<p>Burnt cheesecake terbaik dinikmati dalam suhu ruang. Simpan dalam kulkas maksimal 3 hari dalam wadah kedap udara.</p><p>Keluarkan dari kulkas 10-15 menit sebelum disantap agar tekstur kembali lembut dan creamy. Hindari memasukkan ke freezer karena dapat mengubah tekstur.</p>',
+    '<p>Burnt cheesecake is best enjoyed at room temperature. Store in the refrigerator for up to 3 days in an airtight container.</p><p>Remove from the fridge 10-15 minutes before serving so the texture becomes soft and creamy again. Avoid freezing as it changes the texture.</p>',
     '/assets/burnt-cheesecake-original.jpg',
+    CURRENT_DATE,
+    2,
     true,
     1
   ),
   (
+    'ide-hampers-simpel-untuk-orang-tersayang',
     'Ide Hampers Simpel untuk Orang Tersayang',
     'Simple Hampers Ideas for Loved Ones',
     'Kombinasi burnt cheesecake dengan kartu ucapan kecil bisa jadi hadiah yang berkesan.',
     'A combination of burnt cheesecake with a small greeting card can be a memorable gift.',
+    '<p>Hampers tidak perlu mahal untuk terasa berkesan. Pilih 2-3 varian burnt cheesecake, tambahkan kartu ucapan tulisan tangan, dan kemas dalam box minimalis.</p><p>Cocok untuk ulang tahun, anniversary, atau hadiah rutin. Pesan satu hari sebelumnya agar pengiriman tepat waktu.</p>',
+    '<p>Hampers do not have to be expensive to feel meaningful. Choose 2-3 burnt cheesecake variants, add a handwritten greeting card, and pack them in a minimalist box.</p><p>Perfect for birthdays, anniversaries, or casual gifts. Order one day in advance for on-time delivery.</p>',
     '/assets/burnt-cheesecake-chocobery.jpg',
+    CURRENT_DATE,
+    2,
     true,
     2
   ),
   (
+    'paduan-terbaik-burnt-cheesecake-dengan-minuman',
     'Paduan Terbaik Burnt Cheesecake dengan Minuman',
     'Best Drinks to Pair with Burnt Cheesecake',
     'Cobain dinikmati bersama kopi hitam atau teh tarik untuk pengalaman rasa yang lebih nikmat.',
     'Try enjoying it with black coffee or tarik tea for a more delightful taste experience.',
+    '<p>Burnt cheesecake yang creamy dan sedikit pahit cocok dipadukan dengan minuman yang menyegarkan.</p><p>Kopi hitam tanpa gula menyeimbangkan rasa manis, teh tarik memberikan sentuhan klasik, sedangkan susu dingin cocok untuk yang tidak suka kafein.</p>',
+    '<p>The creamy and slightly bitter burnt cheesecake pairs well with refreshing drinks.</p><p>Black coffee without sugar balances the sweetness, tarik tea gives a classic touch, while cold milk is perfect for those who avoid caffeine.</p>',
     '/assets/burnt-cheesecake-chocoregal.jpg',
+    CURRENT_DATE,
+    2,
     true,
     3
   );

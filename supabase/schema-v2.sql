@@ -127,3 +127,21 @@ CREATE POLICY "Anyone insert funnel"
 DROP POLICY IF EXISTS "Authenticated read funnel" ON funnel_events;
 CREATE POLICY "Authenticated read funnel"
   ON funnel_events FOR SELECT TO authenticated USING (true);
+
+-- ============================================================
+-- Bucket Supabase Storage untuk gambar blog
+-- Jalankan juga di Supabase SQL Editor.
+-- ============================================================
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('blog-images', 'blog-images', true)
+ON CONFLICT (id) DO NOTHING;
+
+DROP POLICY IF EXISTS "Authenticated upload blog images" ON storage.objects;
+CREATE POLICY "Authenticated upload blog images"
+  ON storage.objects FOR INSERT TO authenticated
+  WITH CHECK (bucket_id = 'blog-images');
+
+DROP POLICY IF EXISTS "Public read blog images" ON storage.objects;
+CREATE POLICY "Public read blog images"
+  ON storage.objects FOR SELECT TO anon, authenticated
+  USING (bucket_id = 'blog-images');

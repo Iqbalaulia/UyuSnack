@@ -22,8 +22,13 @@
             </div>
             <div class="blog-card__body">
               <h3 class="blog-card__title">{{ title(post) }}</h3>
+              <div class="blog-card__meta">
+                <time v-if="post.published_at">{{ formatDate(post.published_at) }}</time>
+                <span v-if="post.published_at && post.read_time_minutes">·</span>
+                <span v-if="post.read_time_minutes">{{ post.read_time_minutes }} {{ t('blog.readTime') }}</span>
+              </div>
               <p class="blog-card__excerpt">{{ excerpt(post) }}</p>
-              <a href="#" class="blog-card__link" @click.prevent>
+              <a :href="`#/blog/${post.slug}`" class="blog-card__link">
                 {{ t('blog.readMore') }}
               </a>
             </div>
@@ -45,6 +50,7 @@ const { posts, loading, error, usingFallback, fetchPosts } = useBlogPosts()
 
 const title = (post) => (locale.value === 'en' ? post.title_en : post.title_id)
 const excerpt = (post) => (locale.value === 'en' ? post.excerpt_en : post.excerpt_id)
+const formatDate = (d) => new Date(d).toLocaleDateString(locale.value === 'en' ? 'en-US' : 'id-ID', { dateStyle: 'medium' })
 </script>
 
 <style scoped>
@@ -119,8 +125,17 @@ const excerpt = (post) => (locale.value === 'en' ? post.excerpt_en : post.excerp
 .blog-card__title {
   font-size: 1.05rem;
   font-weight: 800;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.35rem;
   line-height: 1.4;
+}
+
+.blog-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--color-text-light);
+  margin-bottom: 0.6rem;
 }
 
 .blog-card__excerpt {

@@ -1,5 +1,6 @@
 <template>
   <AdminView v-if="isAdmin" />
+  <BlogPostView v-else-if="blogSlug" :slug="blogSlug" />
   <div v-else class="app" :class="{ 'has-announcement': !!activeBatch }">
     <AnnouncementBar :batch="activeBatch" :days-left="daysLeft" />
     <Navbar @open-cart="openCart" />
@@ -44,6 +45,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, defineAsyncComponent } from 'vue'
 const AdminView = defineAsyncComponent(() => import('./views/AdminView.vue'))
+const BlogPostView = defineAsyncComponent(() => import('./views/BlogPostView.vue'))
 import Navbar from './components/Navbar.vue'
 import AnnouncementBar from './components/AnnouncementBar.vue'
 import Hero from './components/Hero.vue'
@@ -71,10 +73,23 @@ const openCart = () => {
 }
 const { batch: activeBatch, daysLeft } = useActiveBatch()
 
-const isAdmin = ref(window.location.hash.startsWith('#/admin') || window.location.hash.startsWith('#admin'))
-const onHashChange = () => {
-  isAdmin.value = window.location.hash.startsWith('#/admin') || window.location.hash.startsWith('#admin')
+const parseHash = () => {
+  const hash = window.location.hash
+  return {
+    isAdmin: hash.startsWith('#/admin') || hash.startsWith('#admin'),
+    blogSlug: (hash.match(/^#\/blog\/(.+)$/) || [])[1] || null,
+  }
 }
+
+const isAdmin = ref(parseHash().isAdmin)
+const blogSlug = ref(parseHash().blogSlug)
+
+const onHashChange = () => {
+  const parsed = parseHash()
+  isAdmin.value = parsed.isAdmin
+  blogSlug.value = parsed.blogSlug
+}
+
 onMounted(() => window.addEventListener('hashchange', onHashChange))
 onUnmounted(() => window.removeEventListener('hashchange', onHashChange))
 </script>
