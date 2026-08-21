@@ -13,10 +13,14 @@ CREATE TABLE IF NOT EXISTS materials (
   name TEXT NOT NULL,
   unit TEXT NOT NULL DEFAULT 'gram',          -- gram / ml / pcs / dst
   price_per_unit NUMERIC NOT NULL DEFAULT 0,  -- harga per 1 unit
+  stock_qty NUMERIC NOT NULL DEFAULT 0,       -- jumlah stok tersedia dalam unit yang sama
   is_active BOOLEAN NOT NULL DEFAULT true,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW())
 );
+
+-- Bila tabel sudah pernah dibuat tanpa kolom stock_qty:
+ALTER TABLE materials ADD COLUMN IF NOT EXISTS stock_qty NUMERIC NOT NULL DEFAULT 0;
 
 ALTER TABLE materials ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Authenticated manage materials" ON materials;

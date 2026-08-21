@@ -57,6 +57,7 @@ import AdminExpenses from '../components/admin/AdminExpenses.vue'
 import AdminBlog from '../components/admin/AdminBlog.vue'
 import AdminTestimonials from '../components/admin/AdminTestimonials.vue'
 import AdminFunnel from '../components/admin/AdminFunnel.vue'
+import AdminStock from '../components/admin/AdminStock.vue'
 
 const session = ref<any>(null)
 const email = ref('')
@@ -72,6 +73,7 @@ const menus = [
   { id: 'po', label: 'Open PO & Produk', icon: '📦' },
   { id: 'batches', label: 'Batch PO', icon: '🗓️' },
   { id: 'materials', label: 'Bahan Baku', icon: '🧪' },
+  { id: 'stock', label: 'Stok Bahan', icon: '📦' },
   { id: 'expenses', label: 'Pengeluaran', icon: '💸' },
   { id: 'blog', label: 'Blog', icon: '📝' },
   { id: 'testimonials', label: 'Testimoni', icon: '💬' },
@@ -84,6 +86,7 @@ const panels: Record<string, any> = {
   po: AdminProducts,
   batches: AdminBatches,
   materials: AdminMaterials,
+  stock: AdminStock,
   expenses: AdminExpenses,
   blog: AdminBlog,
   testimonials: AdminTestimonials,

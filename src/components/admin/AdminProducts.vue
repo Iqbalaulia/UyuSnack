@@ -181,6 +181,25 @@
               <span>HPP per produk:</span>
               <strong>{{ formatPrice(Math.round(recipeHpp)) }}</strong>
             </div>
+
+            <div v-if="yieldBreakdown.rows.length" class="recipe__yield">
+              <div class="recipe__yield-head">
+                <span>Kapasitas produksi dari stok:</span>
+                <strong>{{ yieldBreakdown.maxYield }} pcs</strong>
+              </div>
+              <ul>
+                <li
+                  v-for="(row, i) in yieldBreakdown.rows"
+                  :key="row.name"
+                  :class="{ 'recipe__yield-limit': i === 0 }"
+                >
+                  <span>{{ row.name }}</span>
+                  <span>{{ Math.floor(row.max) }} pcs</span>
+                </li>
+              </ul>
+              <p v-if="yieldBreakdown.maxYield === 0" class="admin-muted">Stok bahan tidak cukup untuk membuat 1 pcs.</p>
+            </div>
+
             <div class="admin-form__actions">
               <button type="button" class="admin-btn" @click="showRecipe = false">Batal</button>
               <button class="admin-btn admin-btn--primary" :disabled="savingRecipe" @click="saveRecipe">
@@ -207,7 +226,7 @@ interface Product {
   id: number; name: string; category: string; price: number; description: string
   image: string; badge: string | null; stock: string; is_active: boolean; hpp: number
 }
-interface Material { id: number; name: string; unit: string; price_per_unit: number }
+interface Material { id: number; name: string; unit: string; price_per_unit: number; stock_qty: number }
 interface RecipeRow { material_id: number | null; quantity: number; yield: number }
 
 const products = ref<Product[]>([])
@@ -285,6 +304,30 @@ const rowHpp = (r: RecipeRow) => {
   return (m.price_per_unit * (r.quantity || 0)) / (r.yield && r.yield > 0 ? r.yield : 1)
 }
 const recipeHpp = computed(() => recipeRows.value.reduce((sum, r) => sum + rowHpp(r), 0))
+
+// Kapasitas produksi maksimal berdasarkan stok bahan baku.
+// Rumus per baris: (stock_qty * yield) / quantity, lalu ambil floor dari nilai terkecil.
+const yieldBreakdown = computed(() => {
+  const rows = recipeRows.value
+    .map((r) => {
+      const m = matById(r.material_id)
+      if (!m || !r.quantity || r.quantity <= 0) return null
+      const yieldVal = r.yield && r.yield > 0 ? r.yield : 1
+      const max = (m.stock_qty * yieldVal) / r.quantity
+      return {
+        name: m.name,
+        unit: m.unit,
+        stock: m.stock_qty,
+        quantity: r.quantity,
+        yield: yieldVal,
+        max,
+      }
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null)
+    .sort((a, b) => a.max - b.max)
+  const maxYield = rows.length ? Math.floor(rows[0].max) : 0
+  return { rows, maxYield }
+})
 
 const openRecipe = async (p: Product) => {
   recipeProduct.value = p
@@ -373,5 +416,39 @@ onMounted(fetchProducts)
 .recipe__total strong {
   color: var(--color-primary-dark);
   font-size: 1.25rem;
+}
+.recipe__yield {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+.recipe__yield-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.recipe__yield-head strong {
+  color: #047857;
+  font-size: 1.15rem;
+}
+.recipe__yield ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+.recipe__yield li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.25rem 0;
+  border-bottom: 1px dashed #bbf7d0;
+}
+.recipe__yield-limit {
+  color: #b91c1c;
+  font-weight: 700;
 }
 </style>

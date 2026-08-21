@@ -18,6 +18,7 @@
             <th>Nama Bahan</th>
             <th>Unit</th>
             <th>Harga / Unit</th>
+            <th>Stok Tersedia</th>
             <th>Aktif</th>
             <th></th>
           </tr>
@@ -27,6 +28,7 @@
             <td><strong>{{ m.name }}</strong></td>
             <td>{{ m.unit }}</td>
             <td>{{ formatPrice(m.price_per_unit) }}</td>
+            <td>{{ m.stock_qty }} {{ m.unit }}</td>
             <td>
               <input type="checkbox" :checked="m.is_active" @change="quickUpdate(m.id, { is_active: ($event.target as HTMLInputElement).checked })" />
             </td>
@@ -62,6 +64,11 @@
                 <input v-model.number="form.price_per_unit" type="number" min="0" step="any" class="admin-input" required />
               </div>
             </div>
+            <div>
+              <label>Stok Tersedia *</label>
+              <input v-model.number="form.stock_qty" type="number" min="0" step="any" class="admin-input" required />
+              <p class="admin-muted">Jumlah bahan yang masih ada dalam unit yang sama.</p>
+            </div>
             <label class="admin-check">
               <input v-model="form.is_active" type="checkbox" />
               Aktif (bisa dipakai di resep)
@@ -86,14 +93,14 @@ import { formatPrice } from '../../data/products'
 import { usePagination } from '../../composables/usePagination'
 import AdminPagination from './AdminPagination.vue'
 
-interface Material { id: number; name: string; unit: string; price_per_unit: number; is_active: boolean }
+interface Material { id: number; name: string; unit: string; price_per_unit: number; stock_qty: number; is_active: boolean }
 
 const materials = ref<Material[]>([])
 const loading = ref(false)
 const saving = ref(false)
 const showForm = ref(false)
 const toast = ref('')
-const emptyForm = () => ({ id: null as number | null, name: '', unit: 'gram', price_per_unit: 0, is_active: true })
+const emptyForm = () => ({ id: null as number | null, name: '', unit: 'gram', price_per_unit: 0, stock_qty: 0, is_active: true })
 const form = ref(emptyForm())
 
 const { page, total, totalPages, paged } = usePagination(materials, 10)
